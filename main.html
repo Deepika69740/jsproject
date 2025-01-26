@@ -1,48 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="main.js"></script>
+    <style>
+        .nav-item {
+            margin: 0px 12px;
+            font-size: 1.2rem;
+        }
 
+        .fas {
+            font-size: 1.2rem;
+        }
+
+        nav {
+            font-size: 1.3rem;
+        }
+
+        .navbar-brand {
+            font-size: 2.3rem;
+        }
+
+        .input-group .form-control {
+            border-radius: 20px 0 0 20px;
+        }
+
+        .input-group .btn {
+            border-radius: 0 20px 20px 0;
+        }
+
+        .input-group .btn {
+            background-color: transparent;
+            border-color: gray;
+            color: lightslategray;
+        }
+
+        .carousel-item > img {
+            padding-top: 60px;
+            height: 35vw;
+        }
+
+        .image-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 10px;
+        }
+
+        .image-container .image-item {
+            position: relative;
+            width: 30%;
+        }
+
+        .image-container .image-item img {
+            width: 100%;
+            height: 500px;
+            margin-top: 1.5rem;
+        }
+
+        .image-container .image-item button {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #F08080;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 1rem;
+            border-radius: 5px;
+        }
+    </style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container-fluid">
-          <a class="navbar-brand" style="font-weight: bold; " href="#"><h3>ArtistryHub</h3></a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-              <li class="nav-item">
-                <a class="nav-link" href="#">Men</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Women</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">About Us</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#"><i class="fas fa-search"></i> Search</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#"><i class="fas fa-store"></i> Find Stores</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#"><i class="fas fa-shopping-cart"></i> Cart</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#"><i class="fas fa-user"></i> Logout</a>
-              </li>
-            </ul>
-          </div>
+            <a class="navbar-brand" style="font-weight: bold;" href="#">
+                <h3>ArtistryHub</h3>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Arts</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Gifts</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Clothing</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
+                    <li class="nav-item d-flex align-items-center">
+                        <div class="input-group search-bar">
+                            <input type="text" id="searchInput" class="form-control" placeholder="Search..." />
+                            <button id="searchButton" class="btn btn-outline-primary">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-user" id="logout"></i> Logout</a></li>
+                </ul>
+            </div>
         </div>
-      </nav>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
+    </nav>
+    <div id="mainbody">
+    <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://images.freecreatives.com/wp-content/uploads/2015/03/Street-Modern-painting.jpg"
+                    class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="https://tse2.mm.bing.net/th?id=OIP.Vs7vRaFZZYI0Vhhew5W1aAHaEo&pid=Api&P=0&h=980"
+                    class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="https://serviceapp.sgp1.cdn.digitaloceanspaces.com/public/images/642e4ffd0532ab92d7b6249684c48b0e3c5830d2df20f.png"
+                    class="d-block w-100" alt="...">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    <div class="animate__animated animate__slideInLeft">
+        <div class="image-container">
+            <div class="image-item">
+                <img src="https://img3.junaroad.com/uiproducts/18736066/zoom_1-1687936939.jpg" id="container"/>
+                <button id="explore">Explore</button>
+            </div>
+            <div class="image-item">
+                <img src="https://ih1.redbubble.net/image.1034556513.2310/ssrco,tote,cotton,canvas_creme,flatlay,square,600x600-bg,f8f8f8.1.jpg" id="container"/>
+                <button id="explore">Explore</button>
+            </div>
+            <div class="image-item">
+                <img src="https://www.bernardbeneito.com/wp-content/uploads/2018/03/abstract-nature-wall-art-regarding-most-popular-paintings-landscapes-nature-wallpaper-high-resolution.jpg"  id="container"/>
+                <button id="explore">Explore</button>
+            </div>
+            <div class="image-item">
+                <img src="https://ih1.redbubble.net/image.440573773.4073/icr,samsung_galaxy_s24_soft,back,a,x600-pad,600x600,f8f8f8.u6.jpg" id="container"/>
+                <button id="explore">Explore</button>
+            </div>
+        </div>
+    </div>
+    </div>
 </body>
 </html>

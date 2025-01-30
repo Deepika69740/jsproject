@@ -267,8 +267,8 @@ document.getElementById("dress").addEventListener("click",()=>main(dresses))
 document.getElementById("gift1").addEventListener("click",()=>main(gifts))
 document.getElementById("art").addEventListener("click",()=>main(art))
 document.getElementById("gift2").addEventListener("click",()=>main(gifts))
-// let gift = document.querySelectorAll(".gift")
-// console.log(gift);
+let gift = document.querySelectorAll(".gift")
+console.log(gift);
 
 // gift.addEventListener("click",()=>main(gifts))
 
@@ -294,17 +294,127 @@ function main(type=null){
 
 }
 
-// document.addEventListener('DOMContentLoaded', () => {
-//     const explore = document.querySelectorAll('#explore');
-//         explore.forEach(e => {
-//         e.addEventListener('click', () => {
-//             const mainBody = document.getElementById('mainbody');
-//             if (mainBody) {
-//                 mainBody.innerHTML = ''; 
+// // document.addEventListener('DOMContentLoaded', () => {
+// //     const explore = document.querySelectorAll('#explore');
+// //         explore.forEach(e => {
+// //         e.addEventListener('click', () => {
+// //             const mainBody = document.getElementById('mainbody');
+// //             if (mainBody) {
+// //                 mainBody.innerHTML = ''; 
                 
+// //             }
+// //         });
+// //     });
+// // });
+
+
+// let searchInput=document.getElementById("searchInput")
+// let mainbody=document.getElementById("mainbody")
+// // searchInput.addEventListener("click",()=>{
+//   // alert("hello")
+//   // mainbody.innerHTML=""
+//   // let postForm = document.getElementById("pBtn");
+//             searchInput.addEventListener("click", async (e) => {
+//               mainbody.innerHTML=""
+//               e.preventDefault();
+//             //   await set(ref(database, "artyhub"), {
+//             //     art: art,
+//             //     dresses: dresses,
+//             //     gifts: gifts
+//             //   }).then(() => {
+//             //     alert("Job posted successfully");
+//             //   });
+//             // });
+            
+//             // Function to fetch data from Firebase
+//             async function fetchData() {
+//               try {
+//                 const snapshot = await get(ref(database, "artyhub"));
+//                 if (snapshot.exists()) {
+//                   return snapshot.val();
+//                 } else {
+//                   console.error("No data available.");
+//                   return {};
+//                 }
+//               } catch (error) {
+//                 console.error("Error fetching data:", error);
+//                 return {};
+//               }
 //             }
-//         });
-//     });
-// });
+//             function displayData(items, containerId) {
+//                             const container = document.getElementById("mainbody");
+//                             container.innerHTML = ""; // Clear existing content
+//                             snapshot.forEach(item => {
+//                               const card = `
+//                                 <div class="card" class="animate__animated animate__bounce"style="width: 25%; height: 650px; border: 1px solid #ddd; padding: 5px; margin: 5px; border-radius: 5px; box-sizing: border-box; display: inline-block; vertical-align: top;">
+//                                   <div>
+//                                     <h3>${item.title}</h3>
+//                                     <img src="${item.image}" alt="${item.title}" style="width: 350px; height: 400px; display: block; margin: 0 auto;">
+//                                     <p>${item.description}</p>
+//                                     <p>Price: $${item.price}</p>
+//                                     <button>Add To Cart</button>
+//                                     <button>Buy Now</button>
+//                                   </div>
+//                                 </div>
+//                               `;
+//                               container.innerHTML += card;
+//                             });
+//                           }
+//                           displayData(containerId)
+//                           fetchData()
+                          
+// // })
+// let searchInput = document.getElementById("searchInput");
+// let mainbody = document.getElementById("mainbody");
 
+searchInput.addEventListener("focus", async (e) => {
+    mainbody.innerHTML = ""; // Clear the existing content
+    e.preventDefault();
 
+    // Display all items (art, dresses, and gifts) when the search bar is focused
+    displayItems([...art, ...dresses, ...gifts]);
+});
+
+searchInput.addEventListener("input", async (e) => {
+    mainbody.innerHTML = ""; // Clear the existing content
+    e.preventDefault();
+
+    let searchTerm = searchInput.value.trim().toLowerCase();
+
+    if (searchTerm === "") {
+        // If search bar is empty after typing, display all items
+        displayItems([...art, ...dresses, ...gifts]);
+    } else {
+        // Filter items based on the search term (e.g., by category or title)
+        let filteredItems = [
+            ...art,
+            ...dresses,
+            ...gifts
+        ].filter(item => 
+            item.title.toLowerCase().includes(searchTerm) || 
+            item.description.toLowerCase().includes(searchTerm) ||
+            item.category.toLowerCase().includes(searchTerm)
+        );
+
+        displayItems(filteredItems); // Display filtered items
+    }
+});
+
+function displayItems(items) {
+    const mainBody = document.getElementById('mainbody');
+    items.forEach(item => {
+        let card = document.createElement("div");
+        card.innerHTML = `
+        <div class="card" style="width: 25%; height: 650px; border: 1px solid #ddd; padding: 5px; margin: 5px; border-radius: 5px; box-sizing: border-box; display: inline-block; vertical-align: top;">
+            <div>
+                <h3>${item.title}</h3>
+                <img src="${item.image}" alt="${item.title}" style="width: 350px; height: 400px; display: block; margin: 0 auto;">
+                <p>${item.description}</p>
+                <p>Price: $${item.price}</p>
+                <button>Add To Cart</button>
+                <button>Buy Now</button>
+            </div>
+        </div>`;
+        mainBody.appendChild(card);
+    });
+}

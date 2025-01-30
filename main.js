@@ -267,8 +267,8 @@ document.getElementById("dress").addEventListener("click",()=>main(dresses))
 document.getElementById("gift1").addEventListener("click",()=>main(gifts))
 document.getElementById("art").addEventListener("click",()=>main(art))
 document.getElementById("gift2").addEventListener("click",()=>main(gifts))
-let gift = document.querySelectorAll(".gift")
-console.log(gift);
+// let gift = document.querySelectorAll(".gift")
+// console.log(gift);
 
 // gift.addEventListener("click",()=>main(gifts))
 
@@ -293,80 +293,6 @@ function main(type=null){
     })
 
 }
-
-// // document.addEventListener('DOMContentLoaded', () => {
-// //     const explore = document.querySelectorAll('#explore');
-// //         explore.forEach(e => {
-// //         e.addEventListener('click', () => {
-// //             const mainBody = document.getElementById('mainbody');
-// //             if (mainBody) {
-// //                 mainBody.innerHTML = ''; 
-                
-// //             }
-// //         });
-// //     });
-// // });
-
-
-// let searchInput=document.getElementById("searchInput")
-// let mainbody=document.getElementById("mainbody")
-// // searchInput.addEventListener("click",()=>{
-//   // alert("hello")
-//   // mainbody.innerHTML=""
-//   // let postForm = document.getElementById("pBtn");
-//             searchInput.addEventListener("click", async (e) => {
-//               mainbody.innerHTML=""
-//               e.preventDefault();
-//             //   await set(ref(database, "artyhub"), {
-//             //     art: art,
-//             //     dresses: dresses,
-//             //     gifts: gifts
-//             //   }).then(() => {
-//             //     alert("Job posted successfully");
-//             //   });
-//             // });
-            
-//             // Function to fetch data from Firebase
-//             async function fetchData() {
-//               try {
-//                 const snapshot = await get(ref(database, "artyhub"));
-//                 if (snapshot.exists()) {
-//                   return snapshot.val();
-//                 } else {
-//                   console.error("No data available.");
-//                   return {};
-//                 }
-//               } catch (error) {
-//                 console.error("Error fetching data:", error);
-//                 return {};
-//               }
-//             }
-//             function displayData(items, containerId) {
-//                             const container = document.getElementById("mainbody");
-//                             container.innerHTML = ""; // Clear existing content
-//                             snapshot.forEach(item => {
-//                               const card = `
-//                                 <div class="card" class="animate__animated animate__bounce"style="width: 25%; height: 650px; border: 1px solid #ddd; padding: 5px; margin: 5px; border-radius: 5px; box-sizing: border-box; display: inline-block; vertical-align: top;">
-//                                   <div>
-//                                     <h3>${item.title}</h3>
-//                                     <img src="${item.image}" alt="${item.title}" style="width: 350px; height: 400px; display: block; margin: 0 auto;">
-//                                     <p>${item.description}</p>
-//                                     <p>Price: $${item.price}</p>
-//                                     <button>Add To Cart</button>
-//                                     <button>Buy Now</button>
-//                                   </div>
-//                                 </div>
-//                               `;
-//                               container.innerHTML += card;
-//                             });
-//                           }
-//                           displayData(containerId)
-//                           fetchData()
-                          
-// // })
-// let searchInput = document.getElementById("searchInput");
-// let mainbody = document.getElementById("mainbody");
-
 searchInput.addEventListener("focus", async (e) => {
     mainbody.innerHTML = ""; // Clear the existing content
     e.preventDefault();
@@ -405,7 +331,7 @@ function displayItems(items) {
     items.forEach(item => {
         let card = document.createElement("div");
         card.innerHTML = `
-        <div class="card" style="width: 25%; height: 650px; border: 1px solid #ddd; padding: 5px; margin: 5px; border-radius: 5px; box-sizing: border-box; display: inline-block; vertical-align: top;">
+        <div class="card" style="width: 25%; height: 650px; border: 1px solid #ddd; padding: 5px; margin: 5px; border-radius: 5px; box-sizing: border-box; display: flex; vertical-align: top;">
             <div>
                 <h3>${item.title}</h3>
                 <img src="${item.image}" alt="${item.title}" style="width: 350px; height: 400px; display: block; margin: 0 auto;">
@@ -418,3 +344,98 @@ function displayItems(items) {
         mainBody.appendChild(card);
     });
 }
+
+document.getElementById("art1").addEventListener("click", (e) => {
+    e.preventDefault();
+    displayCategoryItems(art, 'Art Collection');
+});
+
+document.getElementById("gifts1").addEventListener("click", (e) => {
+    e.preventDefault();
+    displayCategoryItems(gifts, 'Gift Collection');
+});
+
+document.getElementById("clothing").addEventListener("click", (e) => {
+    e.preventDefault();
+    displayCategoryItems(dresses, 'Dress Collection');
+});
+
+// Generic function to display category items
+function displayCategoryItems(items, categoryTitle) {
+    const mainBody = document.getElementById('mainbody');
+    // Clear existing content
+    mainBody.innerHTML = "";
+    
+    // Create container with animation
+    const container = document.createElement('div');
+    container.className = 'container mt-5 animate__animated animate__fadeIn';
+    container.style.paddingTop = '60px';
+    
+    // Add category title
+    const titleElement = document.createElement('h2');
+    titleElement.className = 'text-center mb-4';
+    titleElement.textContent = categoryTitle;
+    container.appendChild(titleElement);
+    
+    // Create row for cards
+    const row = document.createElement('div');
+    row.className = 'row g-5';
+    
+    // Loop through items and create cards
+    items.forEach(item => {
+        const col = document.createElement('div');
+        col.className = 'col-12 col-md-6 col-lg-4';
+        
+        const card = document.createElement('div');
+        card.className = 'card h-100 shadow-sm';
+        card.innerHTML = `
+            <div class="">
+                <img src="${item.image}" 
+                     class="card-img-top" 
+                     alt="${item.title}" 
+                     style="height: 450px; object-fit: cover;">
+            </div>
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">${item.title}</h5>
+                <p class="card-text flex-grow-1">${item.description}</p>
+                <p>$${item.price.toFixed(2)}</p>
+                <div class="d-flex justify-content-between mt-3">
+                    <button class="btn btn-outline-primary">
+                        <i class="fas fa-cart-plus"></i> Add To Cart
+                    </button>
+                    <button class="btn btn-success">
+                        <i class="fas fa-shopping-bag"></i> Buy Now
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        // Add hover effect
+        card.addEventListener('mouseenter', () => {
+            card.classList.add('shadow');
+            card.style.transform = 'translateY(-5px)';
+            card.style.transition = 'all 0.3s ease';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.classList.remove('shadow');
+            card.style.transform = 'translateY(0)';
+        });
+        
+        col.appendChild(card);
+        row.appendChild(col);
+    });
+    
+    container.appendChild(row);
+    mainBody.appendChild(container);
+}
+
+
+// let logout=document.getElementById("logout")
+// logout.addEventListener("click",()=>{
+//     alert("hee")
+//     location.href="navbar.html"
+// })
+document.getElementById("logout1").addEventListener("click",()=>{
+    alert("hello")
+})

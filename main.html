@@ -99,7 +99,7 @@
                     <li class="nav-item"><a class="nav-link" href="#" id="art1">Arts</a></li>
                     <li class="nav-item"><a class="nav-link" href="#" id="gifts1">Gifts</a></li>
                     <li class="nav-item"><a class="nav-link" href="#" id="clothing">Clothing</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
                     <li class="nav-item d-flex align-items-center">
                         <div class="input-group search-bar">
                             <input type="text" id="searchInput" class="form-control" placeholder="Search..." />
@@ -108,6 +108,10 @@
                             </button>
                         </div>
                     </li>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="background-color: lightgrey; color: rgb(113, 110, 110);border: none; ">
+                        <i class="fas fa-upload"></i>upload
+                      </button>
+                    <!-- <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-upload"></i> uploads</a></li> -->
                     <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-shopping-cart"></i> Cart</a></li>
                     <li class="nav-item"  id="logout"><a class="nav-link" href="#"><i class="fas fa-user"></i> Logout</a></li>
                 </ul>
@@ -159,13 +163,76 @@
             </div>
         </div>
     </div>
-    </div>
+    <section id="about-us" class="py-5 text-center bg-light">
+        <div class="container">
+            <h2 id="about">About Us</h2>
+            <p>Welcome to ArtistryHub, your destination for art, unique gifts, and fashion. We connect talented artists with art lovers, offering a curated selection of artworks, handmade gifts, and stylish clothing. Discover creativity and inspiration, whether decorating your space or finding the perfect gift.</p>
+        </div>
+    </section>
+    
+    <!-- Footer Section -->
+    <footer class="text-center py-4 bg-dark text-white">
+        <div class="container">
+            <p>&copy; 2025 ArtistryHub. All Rights Reserved.</p>
+            <div>
+                <a href="#" class="text-white mx-2"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-white mx-2"><i class="fab fa-facebook"></i></a>
+            </div>
+        </div>
+    </footer>
+</div>
     <!-- <div id="artContainer" class="animate__animated animate__pulse">sxdcgfv</div> -->
     <!-- <div id="dressContainer">zsxdcfvgh</div> -->
     <!-- <div id="giftContainer">rxdcfvgb</div> -->
      <div id="container"></div>
+      
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Product</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="productForm">
+                    <div class="mb-3">
+                        <label for="name" class="form-label" id="name">id</label>
+                        <input type="text" class="form-control" id="name1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="title" class="form-label" id="title">Title</label>
+                        <input type="text" class="form-control" id="title1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="category" class="form-label" id="category1">Category</label>
+                        <select class="form-control" id="category" required>
+                            <option value="" disabled selected>Select an option</option>
+                            <option value="art">Art</option>
+                            <option value="gifts">Gifts</option>
+                            <option value="dresses">Dresses</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label" id="price">Price</label>
+                        <input type="number" class="form-control" id="price1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="imageSrc" class="form-label" id="url">Image URL</label>
+                        <input type="text" class="form-control" id="imageSrc1" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="post">Post</button>
+            </div>
+        </div>
+    </div>
+</div>
+    <!-- About Us Section -->
 
-
+<button id="pBtn">dcfvg</button>
      <script type="module" src="main.js"></script>
 </body>
 </html>

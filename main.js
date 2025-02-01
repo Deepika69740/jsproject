@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-import { getDatabase, ref, set, get }  from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
+import { getDatabase, ref, set, get ,push , update}  from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCVPdMv4iTpI19dax30goQhEksjnuXzhHw",
@@ -10,16 +10,21 @@ const firebaseConfig = {
   messagingSenderId: "467288180177",
   appId: "1:467288180177:web:c0385252c8beb466088cf0"
 };
-
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const database = getDatabase(app);
 
+let art = []
+let dresses = []
+let gifts = []
 async function fetchData() {
     try {
       const snapshot = await get(ref(database, "artyhub"));
       if (snapshot.exists()) {
+        let data = snapshot.val()
+        art = data.art;
+        dresses = data.dresses;
+        gifts = data.gifts;
         return snapshot.val();
       } else {
         console.error("No data available.");
@@ -29,15 +34,10 @@ async function fetchData() {
       console.error("Error fetching data:", error);
       return {};
     }
+
   }
 
-
-let data = await fetchData()
-
-// console.log(data)
-
-const {art,dresses,gifts} = data
-
+  await fetchData()
 // const  art= [
 //     {
 //       "id": 1,
@@ -286,13 +286,24 @@ const {art,dresses,gifts} = data
 
 // ]
 
+let postForm = document.getElementById("pBtn");
+            postForm.addEventListener("click", async (e) => {
+              e.preventDefault();
+              await set(ref(database, "artyhub"), {
+                art: art,
+                dresses: dresses,
+                gifts: gifts
+              }).then(() => {
+                alert("Job posted successfully");
+              });
+            });
+
 document.getElementById("dress").addEventListener("click",()=>main(dresses))
 document.getElementById("gift1").addEventListener("click",()=>main(gifts))
 document.getElementById("art").addEventListener("click",()=>main(art))
 document.getElementById("gift2").addEventListener("click",()=>main(gifts))
 // let gift = document.querySelectorAll(".gift")
 // console.log(gift);
-
 // gift.addEventListener("click",()=>main(gifts))
 
 function main(type=null){
@@ -373,6 +384,7 @@ function displayItems(items) {
         
         const card = document.createElement('div');
         card.className = 'card h-100 shadow-sm';
+        item.price = Number(item.price)
         card.innerHTML = `
             <div class="">
                 <img src="${item.image}" 
@@ -458,6 +470,7 @@ function displayCategoryItems(items, categoryTitle) {
         
         const card = document.createElement('div');
         card.className = 'card h-100 shadow-sm';
+        item.price = Number(item.price)
         card.innerHTML = `
             <div class="">
                 <img src="${item.image}" 
@@ -467,7 +480,7 @@ function displayCategoryItems(items, categoryTitle) {
             </div>
             <div class="card-body d-flex flex-column">
                 <h5 class="card-title">${item.title}</h5>
-                <p class="card-text flex-grow-1">${item.description}</p>
+                <p class="card-text flex-grow-1">${item.description??"hello World"}</p>
                 <p>$${item.price.toFixed(2)}</p>
                 <div class="d-flex justify-content-between mt-3">
                     <button class="btn btn-outline-primary">
@@ -502,6 +515,54 @@ function displayCategoryItems(items, categoryTitle) {
 
 
 
+let post = document.getElementById("post");
+
+post.addEventListener("click", async (e) => {
+    e.preventDefault();
+
+    let title = document.getElementById("title1").value;
+    let url = document.getElementById("imageSrc1").value;
+    let category = document.getElementById("category").value;
+    let price = document.getElementById("price1").value;
+    let obj = {
+        title: title,
+        category: category,
+        price: price,
+        image: url,
+    };
+
+    // Check if category is valid
+    if (["art", "gifts", "dresses"].includes(category)) {
+        const db = getDatabase();
+        let categoryRef = ref(db, `artyhub/${category}`); // Reference category
+
+        try {
+            // Get existing data
+            let snapshot = await get(categoryRef);
+            let existingData = snapshot.val() || []; // Default to empty array if null
+
+            // Ensure it's an array before pushing new data
+            // if (!Array.isArray(existingData)) {
+            //     existingData = Object.values(existingData); // Convert object back to an array
+            // }
+
+            // Append the new object
+            existingData.push(obj);
+
+            // Save the updated array back to Firebase
+            await set(categoryRef, existingData);
+
+            alert(`Item added successfully to ${category}`);
+        } catch (error) {
+            console.error("Error adding item:", error);
+            alert("Failed to add item.");
+        }
+    } else {
+        alert("Invalid category selected.");
+    }
+
+   await fetchData()
+});
 const logout=document.getElementById("logout")
 logout.addEventListener("click",(e)=>{
   e.preventDefault()

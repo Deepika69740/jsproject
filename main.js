@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-import { getDatabase, ref, set, get ,push , update}  from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
+import { getDatabase, ref, set, get ,push , update,remove}  from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCVPdMv4iTpI19dax30goQhEksjnuXzhHw",
@@ -286,17 +286,17 @@ async function fetchData() {
 
 // ]
 
-let postForm = document.getElementById("pBtn");
-            postForm.addEventListener("click", async (e) => {
-              e.preventDefault();
-              await set(ref(database, "artyhub"), {
-                art: art,
-                dresses: dresses,
-                gifts: gifts
-              }).then(() => {
-                alert("Job posted successfully");
-              });
-            });
+// let postForm = document.getElementById("pBtn");
+//             postForm.addEventListener("click", async (e) => {
+//               e.preventDefault();
+//               await set(ref(database, "artyhub"), {
+//                 art: art,
+//                 dresses: dresses,
+//                 gifts: gifts
+//               }).then(() => {
+//                 alert("Job posted successfully");
+//               });
+//             });
 
 document.getElementById("dress").addEventListener("click",()=>main(dresses))
 document.getElementById("gift1").addEventListener("click",()=>main(gifts))
@@ -318,13 +318,109 @@ function main(type=null){
             <img src="${item.image}" alt="${item.title}" style="width: 350px; height: 400px; display: block; margin: 0 auto;">
             <p>${item.description}</p>
             <p>Price: $${item.price}</p>
-            <button>Add To Cart</button>
+            <button id="addToCart">Add To Cart</button>
             <button>Buy Now</button>
+            
           </div>
         </div>
       `
+      
       mainBody.appendChild(card)
-    })
+      // Add to Cart Functionality
+card.querySelector("#addToCart").addEventListener("click", async () => {
+    try {
+        const user = auth.currentUser;
+        if (!user) {
+            alert("Please log in to add items to the cart.");
+            return;
+        }
+
+        const cartRef = ref(database, `users/${user.uid}/cart`);
+        await push(cartRef, item);
+        alert("Item added to cart successfully!");
+    } catch (error) {
+        console.error("Error adding to cart:", error);
+        alert("Failed to add item to cart.");
+    }
+});
+
+// Fetch and Display Cart Items
+// async function fetchCartItems() {
+//     try {
+//         const user = auth.currentUser;
+//         if (!user) {
+//             console.log("User not logged in.");
+//             return [];
+//         }
+
+//         const cartRef = ref(database, `users/${user.uid}/cart`);
+//         const snapshot = await get(cartRef);
+
+//         if (snapshot.exists()) {
+//             return Object.values(snapshot.val());
+//         } else {
+//             console.log("No items in the cart.");
+//             return [];
+//         }
+//     } catch (error) {
+//         console.error("Error fetching cart items:", error);
+//         return [];
+//     }
+// }
+
+// async function displayCartItems() {
+//     const cartItems = await fetchCartItems();
+//     const cartContainer = document.getElementById("cartContainer");
+
+//     if (cartItems.length === 0) {
+//         cartContainer.innerHTML = "<p>Your cart is empty.</p>";
+//         return;
+//     }
+
+//     cartContainer.innerHTML = "";
+
+//     cartItems.forEach((item, index) => {
+//         const cartItem = document.createElement("div");
+//         cartItem.className = "cart-item";
+//         cartItem.innerHTML = `
+//             <div>
+//                 <h4>${item.title}</h4>
+//                 <img src="${item.image}" alt="${item.title}" style="width: 100px; height: 100px;">
+//                 <p>${item.description}</p>
+//                 <p>Price: $${item.price.toFixed(2)}</p>
+//                 <button onclick="removeFromCart('${index}')">Remove</button>
+//             </div>
+//         `;
+//         cartContainer.appendChild(cartItem);
+//     });
+// }
+
+// Remove Item from Cart
+// async function removeFromCart(index) {
+//     try {
+//         const user = auth.currentUser;
+//         if (!user) {
+//             alert("Please log in to manage your cart.");
+//             return;
+//         }
+
+//         const cartRef = ref(database, `users/${user.uid}/cart`);
+//         const snapshot = await get(cartRef);
+
+//         if (snapshot.exists()) {
+//             let cartItems = Object.values(snapshot.val());
+//             cartItems.splice(index, 1);
+//             await set(cartRef, cartItems);
+//             alert("Item removed from cart.");
+//             displayCartItems();
+//         }
+//     } catch (error) {
+//         console.error("Error removing item from cart:", error);
+//         alert("Failed to remove item from cart.");
+//     }
+// }
+      
+})
 
 }
 searchInput.addEventListener("focus", async (e) => {
@@ -364,10 +460,6 @@ function displayItems(items) {
     const container = document.createElement('div');
     container.className = 'container mt-5 animate__animated animate__fadeIn';
     container.style.paddingTop = '60px';
-    
-    
-    
-    
     // Add category title
     const titleElement = document.createElement('h2');
     titleElement.className = 'text-center mb-4';
@@ -400,9 +492,10 @@ function displayItems(items) {
                     <button class="btn btn-outline-primary">
                         <i class="fas fa-cart-plus"></i> Add To Cart
                     </button>
-                    <button class="btn btn-success">
+                    <button class="btn btn-success" id="addToCart">
                         <i class="fas fa-shopping-bag"></i> Buy Now
                     </button>
+                    
                 </div>
             </div>
         `;
@@ -425,6 +518,12 @@ function displayItems(items) {
     
     container.appendChild(row);
     mainBody.appendChild(container);
+    // card.querySelector("#addToCart").addEventListener("click",()=>{
+    //     alert("Added To Cart")
+    //     let cartItems= JSON.parse(localStorage.getItem("cartItems")) || []
+    //       cartItems.push(item)
+    //     localStorage.setItem("cartItems",JSON.stringify(cartItems))
+    //   })
 }
 
 document.getElementById("art1").addEventListener("click", (e) => {
@@ -512,11 +611,7 @@ function displayCategoryItems(items, categoryTitle) {
     container.appendChild(row);
     mainBody.appendChild(container);
 }
-
-
-
 let post = document.getElementById("post");
-
 post.addEventListener("click", async (e) => {
     e.preventDefault();
 
@@ -563,8 +658,153 @@ post.addEventListener("click", async (e) => {
 
    await fetchData()
 });
+
+let cart = document.getElementById("cart");
+cart.addEventListener("click", async () => {
+    mainbody.innerHTML = ""; // Clear the mainbody before displaying cart items
+
+    // Fetch and Display Cart Items
+    async function fetchCartItems() {
+        try {
+            const user = auth.currentUser;
+            if (!user) {
+                alert("Please log in to view your cart.");
+                return [];
+            }
+
+            const cartRef = ref(database, `users/${user.uid}/cart`);
+            const snapshot = await get(cartRef);
+
+            if (snapshot.exists()) {
+                return Object.values(snapshot.val());
+            } else {
+                console.log("No items in the cart.");
+                return [];
+            }
+        } catch (error) {
+            console.error("Error fetching cart items:", error);
+            return [];
+        }
+    }
+
+    async function displayCartItems() {
+        const cartItems = await fetchCartItems();
+        const mainBody = document.getElementById('mainbody');
+
+        if (cartItems.length === 0) {
+            mainBody.innerHTML = "<p>Your cart is empty.</p>";
+            return;
+        }
+
+        mainBody.innerHTML = ""; // Clear the mainbody before displaying cart items
+
+        // Create container for cart items
+        const container = document.createElement('div');
+        container.className = 'container mt-5 animate__animated animate__fadeIn';
+        container.style.paddingTop = '60px';
+
+        // Add cart title
+        const titleElement = document.createElement('h2');
+        titleElement.className = 'text-center mb-4';
+        titleElement.textContent = 'Your Cart';
+        container.appendChild(titleElement);
+
+        // Create row for cart items
+        const row = document.createElement('div');
+        row.className = 'row g-5';
+
+        cartItems.forEach((item, index) => {
+            const col = document.createElement('div');
+            col.className = 'col-12 col-md-6 col-lg-4';
+
+            const cartItem = document.createElement('div');
+            cartItem.className = 'card h-100 shadow-sm';
+            cartItem.innerHTML = `
+                <div class="">
+                    <img src="${item.image}" 
+                         class="card-img-top" 
+                         alt="${item.title}" 
+                         style="height: 450px; object-fit: cover;">
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">${item.title}</h5>
+                    <p class="card-text flex-grow-1">${item.description}</p>
+                    <p>$${item.price.toFixed(2)}</p>
+                    <div class="d-flex justify-content-between mt-3">
+                        <button class="btn btn-success">
+                        <i class="fas fa-shopping-bag"></i> Buy Now
+                    </button>
+                        <button class="btn btn-danger" onclick="removeFromCart('${index}')">
+                            <i class="fas fa-trash"></i> Remove
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            col.appendChild(cartItem);
+            row.appendChild(col);
+        });
+
+        container.appendChild(row);
+        mainBody.appendChild(container);
+    }
+    async function removeFromCart(itemKey) {
+        try {
+            const user = auth.currentUser;
+            if (!user) {
+                alert("Please log in to manage your cart.");
+                return;
+            }
+    
+            console.log("Removing item with key:", itemKey);
+    
+            const itemRef = ref(database, `users/${user.uid}/cart/${itemKey}`);
+            await remove(itemRef);
+    
+            alert("Item removed from cart.");
+            await displayCartItems();
+        } catch (error) {
+            console.error("Error removing item from cart:", error);
+            alert("Failed to remove item from cart.");
+        }
+    }
+    window.removeFromCart = removeFromCart;
+window.displayCartItems = displayCartItems;
+    await displayCartItems(); // Call the function to display cart items
+});
+
+// Function to remove an item from the cart
+// Function to remove an item from the cart
+// async function removeFromCart(itemKey) {
+//     try {
+//         const user = auth.currentUser;
+//         if (!user) {
+//             alert("Please log in to manage your cart.");
+//             return;
+//         }
+
+//         console.log("Removing item with key:", itemKey); // Debugging log
+
+//         const itemRef = ref(database, `users/${user.uid}/cart/${itemKey}`);
+//         await remove(itemRef); // Remove item from Firebase
+
+//         alert("Item removed from cart.");
+//         await displayCartItems(); // Refresh cart display
+//     } catch (error) {
+//         console.error("Error removing item from cart:", error);
+//         alert("Failed to remove item from cart.");
+//     }
+// }
+
+
+// Expose function to the global scope
+
+
+
 const logout=document.getElementById("logout")
 logout.addEventListener("click",(e)=>{
   e.preventDefault()
     location.href="navbar.html"
 })
+
+

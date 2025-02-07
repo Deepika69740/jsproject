@@ -455,28 +455,29 @@ searchInput.addEventListener("input", async (e) => {
 function displayItems(items) {
     const mainBody = document.getElementById('mainbody');
     mainBody.innerHTML = "";
-    
+
     // Create container with animation
     const container = document.createElement('div');
     container.className = 'container mt-5 animate__animated animate__fadeIn';
     container.style.paddingTop = '60px';
+
     // Add category title
     const titleElement = document.createElement('h2');
     titleElement.className = 'text-center mb-4';
-    titleElement.textContent = `${items[0].category} Collection ` ;
+    titleElement.textContent = `${items[0].category} Collection`;
     container.appendChild(titleElement);
-    
+
     // Create row for cards
     const row = document.createElement('div');
     row.className = 'row g-5';
-    
+
     items.forEach(item => {
         const col = document.createElement('div');
         col.className = 'col-12 col-md-6 col-lg-4';
-        
+
         const card = document.createElement('div');
         card.className = 'card h-100 shadow-sm';
-        item.price = Number(item.price)
+        item.price = Number(item.price);
         card.innerHTML = `
             <div class="">
                 <img src="${item.image}" 
@@ -489,41 +490,56 @@ function displayItems(items) {
                 <p class="card-text flex-grow-1">${item.description}</p>
                 <p>$${item.price.toFixed(2)}</p>
                 <div class="d-flex justify-content-between mt-3">
-                    <button class="btn btn-outline-primary">
+                    <button class="btn btn-outline-primary add-to-cart">
                         <i class="fas fa-cart-plus"></i> Add To Cart
                     </button>
-                    <button class="btn btn-success" id="addToCart">
+                    <button class="btn btn-success">
                         <i class="fas fa-shopping-bag"></i> Buy Now
                     </button>
-                    
                 </div>
             </div>
         `;
-        
+
         // Add hover effect
         card.addEventListener('mouseenter', () => {
             card.classList.add('shadow');
             card.style.transform = 'translateY(-5px)';
             card.style.transition = 'all 0.3s ease';
         });
-        
+
         card.addEventListener('mouseleave', () => {
             card.classList.remove('shadow');
             card.style.transform = 'translateY(0)';
         });
-        
+
+        // Add to Cart Button Event Listener
+        const addToCartButton = card.querySelector('.add-to-cart');
+        addToCartButton.addEventListener('click', async () => {
+            try {
+                const user = auth.currentUser;
+                if (!user) {
+                    alert("Please log in to add items to the cart.");
+                    return;
+                }
+
+                // Reference to the user's cart in Firebase
+                const cartRef = ref(database, `users/${user.uid}/cart`);
+
+                // Push the item to the cart
+                await push(cartRef, item);
+                alert("Item added to cart successfully!");
+            } catch (error) {
+                console.error("Error adding to cart:", error);
+                alert("Failed to add item to cart.");
+            }
+        });
+
         col.appendChild(card);
         row.appendChild(col);
     });
-    
+
     container.appendChild(row);
     mainBody.appendChild(container);
-    // card.querySelector("#addToCart").addEventListener("click",()=>{
-    //     alert("Added To Cart")
-    //     let cartItems= JSON.parse(localStorage.getItem("cartItems")) || []
-    //       cartItems.push(item)
-    //     localStorage.setItem("cartItems",JSON.stringify(cartItems))
-    //   })
 }
 
 document.getElementById("art1").addEventListener("click", (e) => {
@@ -582,7 +598,7 @@ function displayCategoryItems(items, categoryTitle) {
                 <p class="card-text flex-grow-1">${item.description??"hello World"}</p>
                 <p>$${item.price.toFixed(2)}</p>
                 <div class="d-flex justify-content-between mt-3">
-                    <button class="btn btn-outline-primary">
+                    <button class="btn btn-outline-primary" id="addToCart">
                         <i class="fas fa-cart-plus"></i> Add To Cart
                     </button>
                     <button class="btn btn-success">
@@ -603,7 +619,22 @@ function displayCategoryItems(items, categoryTitle) {
             card.classList.remove('shadow');
             card.style.transform = 'translateY(0)';
         });
+        card.querySelector("#addToCart").addEventListener("click", async () => {
+            try {
+                const user = auth.currentUser;
+                if (!user) {
+                    alert("Please log in to add items to the cart.");
+                    return;
+                }
         
+                const cartRef = ref(database, `users/${user.uid}/cart`);
+                await push(cartRef, item);
+                alert("Item added to cart successfully!");
+            } catch (error) {
+                console.error("Error adding to cart:", error);
+                alert("Failed to add item to cart.");
+            }
+        });
         col.appendChild(card);
         row.appendChild(col);
     });
@@ -768,8 +799,9 @@ cart.addEventListener("click", async () => {
             alert("Failed to remove item from cart.");
         }
     }
+    
     window.removeFromCart = removeFromCart;
-window.displayCartItems = displayCartItems;
+    window.displayCartItems = displayCartItems;
     await displayCartItems(); // Call the function to display cart items
 });
 

@@ -324,9 +324,11 @@ function main(type=null){
           </div>
         </div>
       `
-      
+    
       mainBody.appendChild(card)
       // Add to Cart Functionality
+
+
 card.querySelector("#addToCart").addEventListener("click", async () => {
     try {
         const user = auth.currentUser;
@@ -336,13 +338,18 @@ card.querySelector("#addToCart").addEventListener("click", async () => {
         }
 
         const cartRef = ref(database, `users/${user.uid}/cart`);
-        await push(cartRef, item);
+        await push(cartRef, {
+            ...item,
+            price: Number(item.price) // Ensure price is a number
+        });
+        
         alert("Item added to cart successfully!");
     } catch (error) {
         console.error("Error adding to cart:", error);
         alert("Failed to add item to cart.");
     }
 });
+
 
 // Fetch and Display Cart Items
 // async function fetchCartItems() {
@@ -422,7 +429,9 @@ card.querySelector("#addToCart").addEventListener("click", async () => {
       
 })
 
+
 }
+
 searchInput.addEventListener("focus", async (e) => {
     mainbody.innerHTML = ""; 
     e.preventDefault();
@@ -693,7 +702,24 @@ post.addEventListener("click", async (e) => {
 let cart = document.getElementById("cart");
 cart.addEventListener("click", async () => {
     mainbody.innerHTML = ""; // Clear the mainbody before displaying cart items
-
+    async function calculateCartTotal() {
+        try {
+            const user = auth.currentUser;
+            if (!user) return 0;
+    
+            const cartRef = ref(database, `users/${user.uid}/cart`);
+            const snapshot = await get(cartRef);
+    
+            if (snapshot.exists()) {
+                const items = Object.values(snapshot.val());
+                return items.reduce((total, item) => total + Number(item.price), 0);
+            }
+            return 0;
+        } catch (error) {
+            console.error("Error calculating cart total:", error);
+            return 0;
+        }
+    }
     // Fetch and Display Cart Items
     async function fetchCartItems() {
         try {
@@ -718,41 +744,189 @@ cart.addEventListener("click", async () => {
         }
     }
 
+    // async function displayCartItems() {
+    //     const cartItems = await fetchCartItems();
+    //     const mainBody = document.getElementById('mainbody');
+
+    //     if (cartItems.length === 0) {
+    //         mainBody.innerHTML = "<p>Your cart is empty.</p>";
+    //         return;
+    //     }
+
+    //     mainBody.innerHTML = ""; // Clear the mainbody before displaying cart items
+
+    //     // Create container for cart items
+    //     const container = document.createElement('div');
+    //     container.className = 'container mt-5 animate__animated animate__fadeIn';
+    //     container.style.paddingTop = '60px';
+
+    //     // Add cart title
+    //     const titleElement = document.createElement('h2');
+    //     titleElement.className = 'text-center mb-4';
+    //     titleElement.textContent = 'Your Cart';
+    //     container.appendChild(titleElement);
+
+    //     // Create row for cart items
+    //     const row = document.createElement('div');
+    //     row.className = 'row g-5';
+
+    //     cartItems.forEach((item, index) => {
+    //         const col = document.createElement('div');
+    //         col.className = 'col-12 col-md-6 col-lg-4';
+
+    //         const cartItem = document.createElement('div');
+    //         cartItem.className = 'card h-100 shadow-sm';
+    //         cartItem.innerHTML = `
+    //             <div class="">
+    //             <p>${item.id}</p>
+    //                 <img src="${item.image}" 
+    //                      class="card-img-top" 
+    //                      alt="${item.title}" 
+    //                      style="height: 450px; object-fit: cover;">
+    //             </div>
+    //             <div class="card-body d-flex flex-column">
+    //                 <h5 class="card-title">${item.title}</h5>
+    //                 <p class="card-text flex-grow-1">${item.description}</p>
+    //                 <p>$${item.price}</p>
+    //                 <div class="d-flex justify-content-between mt-3">
+    //                     <button class="btn btn-success">
+    //                     <i class="fas fa-shopping-bag"></i> Buy Now
+    //                 </button>
+    //                     <button class="btn btn-danger" onclick="removeFromCart('${index}')" id="removeBtn">
+    //                         <i class="fas fa-trash"></i> Remove
+    //                     </button>
+    //                 </div>
+    //             </div>
+    //         `;
+
+    //         // let removeItem=cartItem.querySelector("#removeBtn");
+    //         // removeItem.addEventListener("click",(e)=>{
+    //         //     e.stopImmediatePropagation()
+    //         //   return  removeFromCart(item.id)
+    //         // })
+       
+
+    //         col.appendChild(cartItem);
+    //         row.appendChild(col);
+    //     });
+
+    //     container.appendChild(row);
+    //     mainBody.appendChild(container);
+    // }
+
+
+    // async function displayCartItems() {
+    //     const cartItems = await fetchCartItems();
+    //     const mainBody = document.getElementById('mainbody');
+    
+    //     if (cartItems.length === 0) {
+    //         mainBody.innerHTML = "<p>Your cart is empty.</p>";
+    //         return;
+    //     }
+    
+    //     mainBody.innerHTML = ""; // Clear the mainbody before displaying cart items
+    
+    //     // Create container for cart items
+    //     const container = document.createElement('div');
+    //     container.className = 'container mt-5 animate__animated animate__fadeIn';
+    //     container.style.paddingTop = '60px';
+    
+    //     // Add cart title
+    //     const titleElement = document.createElement('h2');
+    //     titleElement.className = 'text-center mb-4';
+    //     titleElement.textContent = 'Your Cart';
+    //     container.appendChild(titleElement);
+    
+    //     // Create row for cart items
+    //     const row = document.createElement('div');
+    //     row.className = 'row g-5';
+    
+    //     // Calculate total price
+    //     const totalPrice = cartItems.reduce((total, item) => total + Number(item.price), 0);
+    
+    //     // Add total price display at the top
+    //     const totalDisplay = document.createElement('div');
+    //     totalDisplay.className = 'alert alert-primary text-center mb-4';
+    //     totalDisplay.innerHTML = `
+    //         <h4 class="mb-0">Total: $${totalPrice.toFixed(2)}</h4>
+    //     `;
+    //     container.appendChild(totalDisplay);
+    
+    //     cartItems.forEach((item, index) => {
+    //         const col = document.createElement('div');
+    //         col.className = 'col-12 col-md-6 col-lg-4';
+    
+    //         const cartItem = document.createElement('div');
+    //         cartItem.className = 'card h-100 shadow-sm';
+    //         cartItem.innerHTML = `
+    //             <div class="">
+    //                 <img src="${item.image}" 
+    //                      class="card-img-top" 
+    //                      alt="${item.title}" 
+    //                      style="height: 450px; object-fit: cover;">
+    //             </div>
+    //             <div class="card-body d-flex flex-column">
+    //                 <h5 class="card-title">${item.title}</h5>
+    //                 <p class="card-text flex-grow-1">${item.description}</p>
+    //                 <p class="text-primary fw-bold">$${Number(item.price).toFixed(2)}</p>
+    //                 <div class="d-flex justify-content-between mt-3">
+    //                     <button class="btn btn-success">
+    //                         <i class="fas fa-shopping-bag"></i> Buy Now
+    //                     </button>
+    //                     <button class="btn btn-danger" onclick="removeFromCart('${index}')" id="removeBtn">
+    //                         <i class="fas fa-trash"></i> Remove
+    //                     </button>
+    //                 </div>
+    //             </div>
+    //         `;
+    
+    //         col.appendChild(cartItem);
+    //         row.appendChild(col);
+    //     });
+    
+    //     container.appendChild(row);
+    //     mainBody.appendChild(container);
+    // }
     async function displayCartItems() {
         const cartItems = await fetchCartItems();
         const mainBody = document.getElementById('mainbody');
-
+    
         if (cartItems.length === 0) {
-            mainBody.innerHTML = "<p>Your cart is empty.</p>";
+            mainBody.innerHTML = "<p class='text-center mt-5'>Your cart is empty.</p>";
             return;
         }
-
-        mainBody.innerHTML = ""; // Clear the mainbody before displaying cart items
-
+    
+        mainBody.innerHTML = ""; // Clear the mainbody
+    
         // Create container for cart items
         const container = document.createElement('div');
         container.className = 'container mt-5 animate__animated animate__fadeIn';
         container.style.paddingTop = '60px';
-
+    
         // Add cart title
         const titleElement = document.createElement('h2');
         titleElement.className = 'text-center mb-4';
         titleElement.textContent = 'Your Cart';
         container.appendChild(titleElement);
-
+    
         // Create row for cart items
         const row = document.createElement('div');
         row.className = 'row g-5';
-
-        cartItems.forEach((item, index) => {
+    
+        // Store the keys along with items for proper removal
+        const itemsWithKeys = Object.entries(cartItems).map(([key, value]) => ({
+            key,
+            ...value
+        }));
+    
+        itemsWithKeys.forEach((item) => {
             const col = document.createElement('div');
             col.className = 'col-12 col-md-6 col-lg-4';
-
+    
             const cartItem = document.createElement('div');
             cartItem.className = 'card h-100 shadow-sm';
             cartItem.innerHTML = `
                 <div class="">
-                <p>${item.id}</p>
                     <img src="${item.image}" 
                          class="card-img-top" 
                          alt="${item.title}" 
@@ -761,33 +935,66 @@ cart.addEventListener("click", async () => {
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">${item.title}</h5>
                     <p class="card-text flex-grow-1">${item.description}</p>
-                    <p>$${item.price}</p>
+                    <p class="text-primary fw-bold">$${Number(item.price).toFixed(2)}</p>
                     <div class="d-flex justify-content-between mt-3">
                         <button class="btn btn-success">
-                        <i class="fas fa-shopping-bag"></i> Buy Now
-                    </button>
-                        <button class="btn btn-danger" onclick="removeFromCart('${index}')" id="removeBtn">
+                            <i class="fas fa-shopping-bag"></i> Buy Now
+                        </button>
+                        <button class="btn btn-danger remove-item" data-key="${item.key}" data-price="${item.price}">
                             <i class="fas fa-trash"></i> Remove
                         </button>
                     </div>
                 </div>
             `;
-
-            // let removeItem=cartItem.querySelector("#removeBtn");
-            // removeItem.addEventListener("click",(e)=>{
-            //     e.stopImmediatePropagation()
-            //   return  removeFromCart(item.id)
-            // })
-       
-
+    
             col.appendChild(cartItem);
             row.appendChild(col);
         });
-
+    
         container.appendChild(row);
+    
+        // Calculate total price
+        const totalPrice = itemsWithKeys.reduce((total, item) => total + Number(item.price), 0);
+    
+        // Create total price section at bottom
+        const totalSection = document.createElement('div');
+        totalSection.className = 'container mt-4 mb-5';
+        totalSection.innerHTML = `
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="mb-0">Cart Total</h3>
+                        </div>
+                        <div class="col text-end">
+                            <h3 class="mb-0" id="cartTotal">$${totalPrice.toFixed(2)}</h3>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col">
+                            <button class="btn btn-primary btn-lg w-100">
+                                Proceed to Order
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    
         mainBody.appendChild(container);
+        mainBody.appendChild(totalSection);
+    
+        // Add event listeners for remove buttons
+        document.querySelectorAll('.remove-item').forEach(button => {
+            button.addEventListener('click', async function() {
+                const itemKey = this.getAttribute('data-key');
+                const itemPrice = Number(this.getAttribute('data-price'));
+                await removeFromCart(itemKey, itemPrice);
+            });
+        });
     }
-    async function removeFromCart(itemKey) {
+    
+    async function removeFromCart(itemKey, itemPrice) {
         try {
             const user = auth.currentUser;
             if (!user) {
@@ -795,18 +1002,53 @@ cart.addEventListener("click", async () => {
                 return;
             }
     
-            console.log("Removing item with key:", itemKey);
-    
             const itemRef = ref(database, `users/${user.uid}/cart/${itemKey}`);
             await remove(itemRef);
     
+            // Update the total immediately
+            const currentTotal = document.getElementById('cartTotal');
+            if (currentTotal) {
+                const totalPrice = Number(currentTotal.textContent.replace('$', ''));
+                const newTotal = totalPrice - itemPrice;
+                currentTotal.textContent = `$${newTotal.toFixed(2)}`;
+            }
+    
+            // Refresh the entire cart display if the total is 0
+            if (currentTotal && currentTotal.textContent === '$0.00') {
+                await displayCartItems();
+            } else {
+                // Remove just the card element
+                const cardElement = document.querySelector(`[data-key="${itemKey}"]`).closest('.col');
+                cardElement.remove();
+            }
+    
             alert("Item removed from cart.");
-            await displayCartItems();
         } catch (error) {
             console.error("Error removing item from cart:", error);
             alert("Failed to remove item from cart.");
         }
     }
+
+    // async function removeFromCart(itemKey) {
+    //     try {
+    //         const user = auth.currentUser;
+    //         if (!user) {
+    //             alert("Please log in to manage your cart.");
+    //             return;
+    //         }
+    
+    //         console.log("Removing item with key:", itemKey);
+    
+    //         const itemRef = ref(database, `users/${user.uid}/cart/${itemKey}`);
+    //         await remove(itemRef);
+    
+    //         alert("Item removed from cart.");
+    //         await displayCartItems();
+    //     } catch (error) {
+    //         console.error("Error removing item from cart:", error);
+    //         alert("Failed to remove item from cart.");
+    //     }
+    // }
     
     window.removeFromCart = removeFromCart;
     window.displayCartItems = displayCartItems;
@@ -838,7 +1080,6 @@ cart.addEventListener("click", async () => {
 
 
 // Expose function to the global scope
-
 
 
 const logout=document.getElementById("logout")

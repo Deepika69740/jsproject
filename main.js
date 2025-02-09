@@ -343,90 +343,19 @@ card.querySelector("#addToCart").addEventListener("click", async () => {
             price: Number(item.price) // Ensure price is a number
         });
         
-        alert("Item added to cart successfully!");
+        // alert("Item added to cart successfully!");
+        Swal.fire({             
+                        title: "Item Added!",             
+                        text: "Your item has been added to the cart.",             
+                        icon: "success",             
+                        confirmButtonText: "OK",             
+                        allowOutsideClick: false          
+                    });     
     } catch (error) {
         console.error("Error adding to cart:", error);
         alert("Failed to add item to cart.");
     }
 });
-
-
-// Fetch and Display Cart Items
-// async function fetchCartItems() {
-//     try {
-//         const user = auth.currentUser;
-//         if (!user) {
-//             console.log("User not logged in.");
-//             return [];
-//         }
-
-//         const cartRef = ref(database, `users/${user.uid}/cart`);
-//         const snapshot = await get(cartRef);
-
-//         if (snapshot.exists()) {
-//             return Object.values(snapshot.val());
-//         } else {
-//             console.log("No items in the cart.");
-//             return [];
-//         }
-//     } catch (error) {
-//         console.error("Error fetching cart items:", error);
-//         return [];
-//     }
-// }
-
-// async function displayCartItems() {
-//     const cartItems = await fetchCartItems();
-//     const cartContainer = document.getElementById("cartContainer");
-
-//     if (cartItems.length === 0) {
-//         cartContainer.innerHTML = "<p>Your cart is empty.</p>";
-//         return;
-//     }
-
-//     cartContainer.innerHTML = "";
-
-//     cartItems.forEach((item, index) => {
-//         const cartItem = document.createElement("div");
-//         cartItem.className = "cart-item";
-//         cartItem.innerHTML = `
-//             <div>
-//                 <h4>${item.title}</h4>
-//                 <img src="${item.image}" alt="${item.title}" style="width: 100px; height: 100px;">
-//                 <p>${item.description}</p>
-//                 <p>Price: $${item.price.toFixed(2)}</p>
-//                 <button onclick="removeFromCart('${index}')">Remove</button>
-//             </div>
-//         `;
-//         cartContainer.appendChild(cartItem);
-//     });
-// }
-
-// Remove Item from Cart
-// async function removeFromCart(index) {
-//     try {
-//         const user = auth.currentUser;
-//         if (!user) {
-//             alert("Please log in to manage your cart.");
-//             return;
-//         }
-
-//         const cartRef = ref(database, `users/${user.uid}/cart`);
-//         const snapshot = await get(cartRef);
-
-//         if (snapshot.exists()) {
-//             let cartItems = Object.values(snapshot.val());
-//             cartItems.splice(index, 1);
-//             await set(cartRef, cartItems);
-//             alert("Item removed from cart.");
-//             displayCartItems();
-//         }
-//     } catch (error) {
-//         console.error("Error removing item from cart:", error);
-//         alert("Failed to remove item from cart.");
-//     }
-// }
-      
 })
 
 
@@ -536,7 +465,13 @@ function displayItems(items) {
 
                 // Push the item to the cart
                 await push(cartRef, item);
-                alert("Item added to cart successfully!");
+                Swal.fire({             
+                                title: "Item Added!",             
+                                text: "Your item has been added to the cart.",             
+                                icon: "success",             
+                                confirmButtonText: "OK",             
+                                allowOutsideClick: false          
+                            });     
             } catch (error) {
                 console.error("Error adding to cart:", error);
                 alert("Failed to add item to cart.");
@@ -638,7 +573,14 @@ function displayCategoryItems(items, categoryTitle) {
         
                 const cartRef = ref(database, `users/${user.uid}/cart`);
                 await push(cartRef, item);
-                alert("Item added to cart successfully!");
+                // alert("Item added to cart successfully!");
+                Swal.fire({             
+                                title: "Item Added!",             
+                                text: "Your item has been added to the cart.",             
+                                icon: "success",             
+                                confirmButtonText: "OK",             
+                                allowOutsideClick: false          
+                            });     
             } catch (error) {
                 console.error("Error adding to cart:", error);
                 alert("Failed to add item to cart.");
@@ -1082,10 +1024,47 @@ cart.addEventListener("click", async () => {
 // Expose function to the global scope
 
 
-const logout=document.getElementById("logout")
-logout.addEventListener("click",(e)=>{
-  e.preventDefault()
-    location.href="navbar.html"
-})
+const logout = document.getElementById("logout");
 
+if (logout) {
+  logout.addEventListener("click", async (e) => {
+    e.preventDefault(); // Prevents default action
 
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger"
+      },
+      buttonsStyling: false
+    });
+
+    const result = await swalWithBootstrapButtons.fire({
+      title: "Are you sure?",
+      text: "You will be logged out!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log out!",
+      cancelButtonText: "No, stay here!",
+      reverseButtons: true
+    });
+
+    if (result.isConfirmed) {
+      await swalWithBootstrapButtons.fire({
+        title: "Logged out!",
+        text: "You have been successfully logged out.",
+        icon: "success"
+      });
+
+      // Redirect after logout confirmation
+      location.href = "navbar.html";
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      swalWithBootstrapButtons.fire({
+        title: "Cancelled",
+        text: "You are still logged in!",
+        icon: "error"
+      });
+    }
+  });
+} else {
+  console.error("Logout button not found!");
+}

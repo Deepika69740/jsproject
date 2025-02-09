@@ -2,10 +2,14 @@
     align-content: center;
     height: 25vw;
     width: 60% !important;
-    background-image: url(https://images.pexels.com/photos/6941090/pexels-photo-6941090.jpeg?auto=compress&cs=tinysrgb&w=600);
+    background-image: url("https://img.freepik.com/free-vector/flat-floral-background_23-2149014189.jpg?t=st=1739115640~exp=1739119240~hmac=07c4fb29e799e13c2a8aecf4ec87c8132b1b4b776e59aacc2c4ae27579d1f02a&w=1060");
     background-size: 100%; /* Ensure the background image covers the entire container */
     background-position: center; /* Center the background image */
     border-radius: 5%;
+}
+body{
+    /* background-image: url("https://img.freepik.com/premium-photo/red-vintage-dress-with-floral-pattern-is-displayed-mannequin-against-blue-wall_1223942-25853.jpg?uid=R186632595&ga=GA1.1.1990628255.1739112305&semt=ais_incoming"); */
+    object-fit: fill;
 }
 .sin{
     position: relative;

@@ -752,6 +752,7 @@ cart.addEventListener("click", async () => {
             cartItem.className = 'card h-100 shadow-sm';
             cartItem.innerHTML = `
                 <div class="">
+                <p>${item.id}</p>
                     <img src="${item.image}" 
                          class="card-img-top" 
                          alt="${item.title}" 
@@ -760,17 +761,24 @@ cart.addEventListener("click", async () => {
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">${item.title}</h5>
                     <p class="card-text flex-grow-1">${item.description}</p>
-                    <p>$${item.price.toFixed(2)}</p>
+                    <p>$${item.price}</p>
                     <div class="d-flex justify-content-between mt-3">
                         <button class="btn btn-success">
                         <i class="fas fa-shopping-bag"></i> Buy Now
                     </button>
-                        <button class="btn btn-danger" onclick="removeFromCart('${index}')">
+                        <button class="btn btn-danger" onclick="removeFromCart('${index}')" id="removeBtn">
                             <i class="fas fa-trash"></i> Remove
                         </button>
                     </div>
                 </div>
             `;
+
+            // let removeItem=cartItem.querySelector("#removeBtn");
+            // removeItem.addEventListener("click",(e)=>{
+            //     e.stopImmediatePropagation()
+            //   return  removeFromCart(item.id)
+            // })
+       
 
             col.appendChild(cartItem);
             row.appendChild(col);

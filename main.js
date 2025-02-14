@@ -317,8 +317,8 @@ function main(type = null) {
 
     type.forEach(item => {
         let card = document.createElement("div");
-        card.innerHTML = `
-        <div class="card" style="display: grid; grid-template-rows: auto 1fr auto; width: 300px; height: 500px; border: none; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 15px; background-color: #fff; transition: transform 0.3s ease; overflow: hidden;">
+card.innerHTML = `
+<div class="card" style="display: grid; grid-template-rows: auto 1fr auto; width: 300px; height: 500px; border: none; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 15px; background-color: #fff; transition: transform 0.3s ease; overflow: hidden;">
     <div style="text-align: center; grid-row: 1;">
         <h3 style="font-size: 1.2rem; font-weight: bold; color: #333;">${item.title}</h3>
         <img src="${item.image}" alt="${item.title}" style="width: 250px; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
@@ -329,13 +329,19 @@ function main(type = null) {
     </div>
     <div style="grid-row: 3; display: flex; justify-content: space-between;">
         <button id="addToCart" style="background-color: #3498db; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Add To Cart</button>
-        <button style="background-color: #e74c3c; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Buy Now</button>
+        <button id="buynow" style="background-color: #e74c3c; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Buy Now</button>
     </div>
 </div>
+`;
 
-        `;
+card.querySelector("#buynow").addEventListener("click", () => {
+    const proceedToOrder = new bootstrap.Modal(document.getElementById("addressModal"));
+    proceedToOrder.show();
+    
+});
 
-        mainBody.appendChild(card);
+mainBody.appendChild(card);
+
 
         // Add to Cart Functionality
         card.querySelector("#addToCart").addEventListener("click", async () => {
@@ -443,13 +449,17 @@ function displayItems(items) {
                     <button class="btn btn-outline-primary add-to-cart">
                         <i class="fas fa-cart-plus"></i> Add To Cart
                     </button>
-                    <button class="btn btn-success">
+                    <button class="btn btn-success" id="buynow">
                         <i class="fas fa-shopping-bag"></i> Buy Now
                     </button>
                 </div>
             </div>
         `;
-
+        card.querySelector("#buynow").addEventListener("click", () => {
+            const proceedToOrder = new bootstrap.Modal(document.getElementById("addressModal"));
+            proceedToOrder.show();
+            
+        });
         // Add hover effect
         card.addEventListener('mouseenter', () => {
             card.classList.add('shadow');
@@ -557,12 +567,17 @@ function displayCategoryItems(items, categoryTitle) {
                     <button class="btn btn-outline-primary" id="addToCart">
                         <i class="fas fa-cart-plus"></i> Add To Cart
                     </button>
-                    <button class="btn btn-success">
+                    <button class="btn btn-success" id="buynow">
                         <i class="fas fa-shopping-bag"></i> Buy Now
                     </button>
                 </div>
             </div>
         `;
+        card.querySelector("#buynow").addEventListener("click", () => {
+            const proceedToOrder = new bootstrap.Modal(document.getElementById("addressModal"));
+            proceedToOrder.show();
+            
+        });
         
         // Add hover effect
         card.addEventListener('mouseenter', () => {
@@ -841,6 +856,10 @@ cart.addEventListener("click", async () => {
     //     container.appendChild(row);
     //     mainBody.appendChild(container);
     // }
+
+
+
+
     async function displayCartItems() {
         const cartItems = await fetchCartItems();
         const mainBody = document.getElementById('mainbody');
@@ -892,7 +911,7 @@ cart.addEventListener("click", async () => {
                     <p class="card-text flex-grow-1">${item.description}</p>
                     <p class="text-primary fw-bold">$${Number(item.price).toFixed(2)}</p>
                     <div class="d-flex justify-content-between mt-3">
-                        <button class="btn btn-success">
+                        <button class="btn btn-success" id="buynow">
                             <i class="fas fa-shopping-bag"></i> Buy Now
                         </button>
                         <button class="btn btn-danger remove-item" data-key="${item.key}" data-price="${item.price}">
@@ -901,7 +920,12 @@ cart.addEventListener("click", async () => {
                     </div>
                 </div>
             `;
-    
+            cartItem.querySelector("#buynow").addEventListener("click", () => {
+                const proceedToOrder = new bootstrap.Modal(document.getElementById("addressModal"));
+                proceedToOrder.show();
+                
+            });
+            
             col.appendChild(cartItem);
             row.appendChild(col);
         });
@@ -1084,7 +1108,7 @@ if (logout) {
       });
 
       // Redirect after logout confirmation
-      location.href = "navbar.html";
+      location.href = "index.html";
     } else if (result.dismiss === Swal.DismissReason.cancel) {
       swalWithBootstrapButtons.fire({
         title: "Cancelled",

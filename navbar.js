@@ -353,14 +353,22 @@ const database = getDatabase(app);
 
 // ]
 
-let  postForm=document.getElementById("pBtn");
-postForm.addEventListener("click",async(e)=>{
-  e.preventDefault()
+// let  postForm=document.getElementById("pBtn");
+// postForm.addEventListener("click",async(e)=>{
+//   e.preventDefault()
  
-   await set(ref(database,"artyhub/art"),{
-   art:art,
-   }).then(()=>{
-    alert("job posted successfully")
-   })
+//    await set(ref(database,"artyhub/art"),{
+//    art:art,
+//    }).then(()=>{
+//     alert("job posted successfully")
+//    })
  
+// })
+
+
+
+const guest=document.getElementById(guest)
+guest.addEventListener("click",()=>{
+  location.href='main.html'
 })
+

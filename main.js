@@ -306,60 +306,72 @@ document.getElementById("gift2").addEventListener("click",()=>main(gifts))
 // console.log(gift);
 // gift.addEventListener("click",()=>main(gifts))
 
-function main(type=null){
+function main(type = null) {
     const mainBody = document.getElementById('mainbody');
-    mainBody.innerHTML=""
-    type.forEach(item => {
-        let card = document.createElement("div")
-        card.innerHTML = `
-        <div class="card" class="animate__animated animate__bounce"style="width: 25%; height: 650px; border: 1px solid #ddd; padding: 5px; margin: 5px; border-radius: 5px; box-sizing: border-box; display: inline-block; vertical-align: top;">
-          <div>
-            <h3>${item.title}</h3>
-            <img src="${item.image}" alt="${item.title}" style="width: 350px; height: 400px; display: block; margin: 0 auto;">
-            <p>${item.description}</p>
-            <p>Price: $${item.price}</p>
-            <button id="addToCart">Add To Cart</button>
-            <button>Buy Now</button>
-            
-          </div>
-        </div>
-      `
-    
-      mainBody.appendChild(card)
-      // Add to Cart Functionality
+    mainBody.innerHTML = "";
 
-
-card.querySelector("#addToCart").addEventListener("click", async () => {
-    try {
-        const user = auth.currentUser;
-        if (!user) {
-            alert("Please log in to add items to the cart.");
-            return;
-        }
-
-        const cartRef = ref(database, `users/${user.uid}/cart`);
-        await push(cartRef, {
-            ...item,
-            price: Number(item.price) // Ensure price is a number
-        });
-        
-        // alert("Item added to cart successfully!");
-        Swal.fire({             
-                        title: "Item Added!",             
-                        text: "Your item has been added to the cart.",             
-                        icon: "success",             
-                        confirmButtonText: "OK",             
-                        allowOutsideClick: false          
-                    });     
-    } catch (error) {
-        console.error("Error adding to cart:", error);
-        alert("Failed to add item to cart.");
+    if (!type || !Array.isArray(type)) {
+        console.error("Invalid type array");
+        return;
     }
-});
-})
 
+    type.forEach(item => {
+        let card = document.createElement("div");
+        card.innerHTML = `
+        <div class="card" style="display: grid; grid-template-rows: auto 1fr auto; width: 300px; height: 500px; border: none; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 15px; background-color: #fff; transition: transform 0.3s ease; overflow: hidden;">
+    <div style="text-align: center; grid-row: 1;">
+        <h3 style="font-size: 1.2rem; font-weight: bold; color: #333;">${item.title}</h3>
+        <img src="${item.image}" alt="${item.title}" style="width: 250px; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
+    </div>
+    <div style="grid-row: 2;">
+        <p style="font-size: 1rem; color: #555; text-align: center;">${item.description}</p>
+        <p style="font-size: 1.1rem; font-weight: bold; color: #27ae60; text-align: center;">Price: $${item.price}</p>
+    </div>
+    <div style="grid-row: 3; display: flex; justify-content: space-between;">
+        <button id="addToCart" style="background-color: #3498db; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Add To Cart</button>
+        <button style="background-color: #e74c3c; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Buy Now</button>
+    </div>
+</div>
 
+        `;
+
+        mainBody.appendChild(card);
+
+        // Add to Cart Functionality
+        card.querySelector("#addToCart").addEventListener("click", async () => {
+            try {
+                const user = auth.currentUser;
+                if (!user) {
+                    alert("Please log in to add items to the cart.");
+                    return;
+                }
+
+                const cartRef = ref(database, `users/${user.uid}/cart`);
+                await push(cartRef, {
+                    ...item,
+                    price: Number(item.price) // Ensure price is a number
+                });
+
+                // SweetAlert for success
+                Swal.fire({
+                    title: "Item Added!",
+                    text: "Your item has been added to the cart.",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                    allowOutsideClick: false
+                });
+            } catch (error) {
+                console.error("Error adding to cart:", error);
+                alert("Failed to add item to cart.");
+            }
+        });
+    });
 }
+
+
+
+
+
 
 searchInput.addEventListener("focus", async (e) => {
     mainbody.innerHTML = ""; 
@@ -862,6 +874,7 @@ cart.addEventListener("click", async () => {
         }));
     
         itemsWithKeys.forEach((item) => {
+            console.log(item)
             const col = document.createElement('div');
             col.className = 'col-12 col-md-6 col-lg-4';
     
@@ -897,34 +910,40 @@ cart.addEventListener("click", async () => {
     
         // Calculate total price
         const totalPrice = itemsWithKeys.reduce((total, item) => total + Number(item.price), 0);
-    
-        // Create total price section at bottom
-        const totalSection = document.createElement('div');
-        totalSection.className = 'container mt-4 mb-5';
-        totalSection.innerHTML = `
-            <div class="card shadow">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <h3 class="mb-0">Cart Total</h3>
-                        </div>
-                        <div class="col text-end">
-                            <h3 class="mb-0" id="cartTotal">$${totalPrice.toFixed(2)}</h3>
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col">
-                            <button class="btn btn-primary btn-lg w-100">
-                                Proceed to Order
-                            </button>
-                        </div>
-                    </div>
-                </div>
+
+// Create total price section at bottom
+const totalSection = document.createElement('div');
+totalSection.className = 'container mt-4 mb-5';
+totalSection.innerHTML = `
+   <div class="card shadow w-25"> 
+    <div class="card-body p-2"> 
+        <div class="row align-items-center">
+            <div class="col">
+                <h6 class="mb-0">Cart Total</h6> 
             </div>
-        `;
-    
-        mainBody.appendChild(container);
-        mainBody.appendChild(totalSection);
+            <div class="col text-end">
+                <h5 class="mb-0" id="cartTotal">$${totalPrice.toFixed(2)}</h5>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col">
+                <button class="btn btn-primary btn-sm " style="width:50%" id="proceedBtn"> <!-- Made button smaller -->
+                    Proceed To Order
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+`;
+
+// Add event listener after the element is created
+totalSection.querySelector("#proceedBtn").addEventListener("click", () => {
+    const proceedToOrder = new bootstrap.Modal(document.getElementById("addressModal"));
+    proceedToOrder.show();
+});
+
+mainBody.appendChild(container);
+mainBody.appendChild(totalSection);
     
         // Add event listeners for remove buttons
         document.querySelectorAll('.remove-item').forEach(button => {
@@ -946,6 +965,8 @@ cart.addEventListener("click", async () => {
     
             const itemRef = ref(database, `users/${user.uid}/cart/${itemKey}`);
             await remove(itemRef);
+            console.log("Removing item from path:", `users/${user.uid}/cart/${itemKey}`);
+
     
             // Update the total immediately
             const currentTotal = document.getElementById('cartTotal');
@@ -960,12 +981,19 @@ cart.addEventListener("click", async () => {
                 await displayCartItems();
             } else {
                 // Remove just the card element
-                const cardElement = document.querySelector(`[data-key="${itemKey}"]`).closest('.col');
+                // console.log("Removing item with key:", itemKey);
+                // console.log("Item element in DOM:", document.querySelector(`[data-key="${itemKey}"]`));
+                // const cardElement = document.querySelector(`[data-key=${itemKey}]`).closest('.col');
+                // cardElement.remove();
+
+                // new code
+                const cardElement = document.querySelector(`[data-key="${itemKey}"]`).closest('.card')
                 cardElement.remove();
             }
     
             alert("Item removed from cart.");
         } catch (error) {
+            console.log(error)
             console.error("Error removing item from cart:", error);
             alert("Failed to remove item from cart.");
         }
@@ -1068,3 +1096,16 @@ if (logout) {
 } else {
   console.error("Logout button not found!");
 }
+
+
+document.querySelector("#addressModal .btn-primary").addEventListener("click",  (e) => {
+    e.preventDefault(); // Prevent default form submission
+    
+    Swal.fire({
+        title: "Order Placed!",
+    text: "Your order has been successfully placed.",
+    icon: "success",
+    confirmButtonText: "OK"
+      })
+
+});

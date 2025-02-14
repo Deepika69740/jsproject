@@ -15,6 +15,7 @@
      <!-- Include SweetAlert2 CSS and JS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="./main.css"></script>
 
     <style>
         #main{
@@ -185,9 +186,7 @@
         </div>
     </footer>
 </div>
-    <!-- <div id="artContainer" class="animate__animated animate__pulse">sxdcgfv</div> -->
-    <!-- <div id="dressContainer">zsxdcfvgh</div> -->
-    <!-- <div id="giftContainer">rxdcfvgb</div> -->
+    
      <div id="container"></div>
       
   <!-- Modal -->
@@ -234,9 +233,51 @@
         </div>
     </div>
 </div>
-    <!-- About Us Section -->
+    
 
-<!-- <button id="pBtn">dcfvg</button> -->
+
+
+
+  <div class="modal" id="addressModal" tabindex="-1" class="address">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Shipping & Payment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Address Form -->
+                <div class="mb-4">
+                    <h6>Shipping Address</h6>
+                    <div class="mb-2">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="name">
+                    </div>
+                    <div class="mb-2">
+                        <label for="address" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="address">
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-2">
+                            <label for="city" class="form-label">City</label>
+                            <input type="text" class="form-control" id="city">
+                        </div>
+                        <div class="col-6 mb-2">
+                            <label for="zip" class="form-label">ZIP</label>
+                            <input type="text" class="form-control" id="zip">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
      <script type="module" src="main.js"></script>
 </body>

@@ -310,6 +310,13 @@ function main(type = null) {
     const mainBody = document.getElementById('mainbody');
     mainBody.innerHTML = "";
 
+    // Create a container for cards
+    let cardContainer = document.createElement("div");
+    cardContainer.className = "cardContainer";
+    cardContainer.style.display = "flex";
+    cardContainer.style.flexWrap = "wrap"; 
+    cardContainer.style.gap = "20px"; 
+    cardContainer.style.justifyContent = "center"; 
     if (!type || !Array.isArray(type)) {
         console.error("Invalid type array");
         return;
@@ -317,34 +324,25 @@ function main(type = null) {
 
     type.forEach(item => {
         let card = document.createElement("div");
-card.innerHTML = `
-<div class="card" style="display: grid; grid-template-rows: auto 1fr auto; width: 300px; height: 500px; border: none; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 15px; background-color: #fff; transition: transform 0.3s ease; overflow: hidden;">
-    <div style="text-align: center; grid-row: 1;">
-        <h3 style="font-size: 1.2rem; font-weight: bold; color: #333;">${item.title}</h3>
-        <img src="${item.image}" alt="${item.title}" style="width: 250px; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
-    </div>
-    <div style="grid-row: 2;">
-        <p style="font-size: 1rem; color: #555; text-align: center;">${item.description}</p>
-        <p style="font-size: 1.1rem; font-weight: bold; color: #27ae60; text-align: center;">Price: $${item.price}</p>
-    </div>
-    <div style="grid-row: 3; display: flex; justify-content: space-between;">
-        <button id="addToCart" style="background-color: #3498db; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Add To Cart</button>
-        <button id="buynow" style="background-color: #e74c3c; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Buy Now</button>
-    </div>
-</div>
-`;
+        card.innerHTML = `
+        <div class="card" style="width: 300px; height: 500px; border: none; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 15px; background-color: #fff; transition: transform 0.3s ease; overflow: hidden; display: flex; flex-direction: column; align-items: center;">
+            <h3 style="font-size: 1.2rem; font-weight: bold; color: #333;">${item.title}</h3>
+            <img src="${item.image}" alt="${item.title}" style="width: 250px; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
+            <p style="font-size: 1rem; color: #555; text-align: center;">${item.description}</p>
+            <p style="font-size: 1.1rem; font-weight: bold; color: #27ae60; text-align: center;">Price: $${item.price}</p>
+            <div style="display: flex; justify-content: space-between; width: 100%; padding: 10px;">
+                <button class="addToCartBtn" style="background-color: #3498db; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Add To Cart</button>
+                <button class="buyNowBtn" style="background-color: #e74c3c; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Buy Now</button>
+            </div>
+        </div>
+        `;
 
-card.querySelector("#buynow").addEventListener("click", () => {
-    const proceedToOrder = new bootstrap.Modal(document.getElementById("addressModal"));
-    proceedToOrder.show();
-    
-});
+        card.querySelector(".buyNowBtn").addEventListener("click", () => {
+            const proceedToOrder = new bootstrap.Modal(document.getElementById("addressModal"));
+            proceedToOrder.show();
+        });
 
-mainBody.appendChild(card);
-
-
-        // Add to Cart Functionality
-        card.querySelector("#addToCart").addEventListener("click", async () => {
+        card.querySelector(".addToCartBtn").addEventListener("click", async () => {
             try {
                 const user = auth.currentUser;
                 if (!user) {
@@ -355,10 +353,10 @@ mainBody.appendChild(card);
                 const cartRef = ref(database, `users/${user.uid}/cart`);
                 await push(cartRef, {
                     ...item,
-                    price: Number(item.price) // Ensure price is a number
+                    price: Number(item.price) 
                 });
 
-                // SweetAlert for success
+                
                 Swal.fire({
                     title: "Item Added!",
                     text: "Your item has been added to the cart.",
@@ -371,8 +369,14 @@ mainBody.appendChild(card);
                 alert("Failed to add item to cart.");
             }
         });
+
+        cardContainer.appendChild(card);
     });
+
+    mainBody.appendChild(cardContainer);  
 }
+
+
 
 
 
@@ -859,11 +863,10 @@ cart.addEventListener("click", async () => {
 
 
 
-
     async function displayCartItems() {
         const cartItems = await fetchCartItems();
         const mainBody = document.getElementById('mainbody');
-    
+        console.log(cartItems)
         if (cartItems.length === 0) {
             mainBody.innerHTML = "<p class='text-center mt-5'>Your cart is empty.</p>";
             return;
@@ -891,13 +894,13 @@ cart.addEventListener("click", async () => {
             key,
             ...value
         }));
-    
-        itemsWithKeys.forEach((item) => {
+        
+        cartItems.forEach((item,index) => {
             console.log(item)
             const col = document.createElement('div');
             col.className = 'col-12 col-md-6 col-lg-4';
     
-            const cartItem = document.createElement('div');
+            let cartItem = document.createElement('div');
             cartItem.className = 'card h-100 shadow-sm';
             cartItem.innerHTML = `
                 <div class="">
@@ -911,27 +914,31 @@ cart.addEventListener("click", async () => {
                     <p class="card-text flex-grow-1">${item.description}</p>
                     <p class="text-primary fw-bold">$${Number(item.price).toFixed(2)}</p>
                     <div class="d-flex justify-content-between mt-3">
-                        <button class="btn btn-success" id="buynow">
+                        <button class="btn btn-success">
                             <i class="fas fa-shopping-bag"></i> Buy Now
                         </button>
-                        <button class="btn btn-danger remove-item" data-key="${item.key}" data-price="${item.price}">
+                        <button class="btn btn-danger remove-item" id="remove" data-key="${item.key}" data-price="${item.price}">
                             <i class="fas fa-trash"></i> Remove
                         </button>
                     </div>
                 </div>
             `;
-            cartItem.querySelector("#buynow").addEventListener("click", () => {
-                const proceedToOrder = new bootstrap.Modal(document.getElementById("addressModal"));
-                proceedToOrder.show();
-                
-            });
-            
+    
             col.appendChild(cartItem);
             row.appendChild(col);
+
+            const user = auth.currentUser;
+            const cartRef = ref(database, `users/${user.uid}/cart`);
+            cartItem.querySelector("#remove").addEventListener("click",()=>{
+               let cartpro = cartItems.slice(0, index).concat(cartItems.slice(index + 1));
+                console.log(cartpro);
+                set(cartRef, cartpro)
+            })
+        
         });
     
         container.appendChild(row);
-    
+
         // Calculate total price
         const totalPrice = itemsWithKeys.reduce((total, item) => total + Number(item.price), 0);
 
@@ -978,6 +985,39 @@ mainBody.appendChild(totalSection);
             });
         });
     }
+
+
+    
+
+    
+    // Function to remove from cart (Fixes the Firebase issue)
+    async function removeFromCart(itemKey) {
+        try {
+            const user = auth.currentUser;
+            if (!user) {
+                alert("Please log in to remove items.");
+                return;
+            }
+    
+            const itemRef = ref(database, `users/${user.uid}/cart/${itemKey}`);
+            await remove(itemRef);
+    
+            Swal.fire({
+                title: "Item Removed!",
+                text: "Your item has been removed from the cart.",
+                icon: "success",
+                confirmButtonText: "OK",
+                allowOutsideClick: false
+            });
+    
+            // Refresh cart display
+            displayCartItems();
+        } catch (error) {
+            console.error("Error removing item:", error);
+            alert("Failed to remove item from cart.");
+        }
+    }
+    
     
     async function removeFromCart(itemKey, itemPrice) {
         try {

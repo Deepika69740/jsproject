@@ -367,7 +367,7 @@ const database = getDatabase(app);
 
 
 
-const guest=document.getElementById(guest)
+const guest=document.getElementById("guest")
 guest.addEventListener("click",()=>{
   location.href='main.html'
 })

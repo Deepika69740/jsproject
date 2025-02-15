@@ -315,7 +315,8 @@ function main(type = null) {
     cardContainer.className = "cardContainer";
     cardContainer.style.display = "flex";
     cardContainer.style.flexWrap = "wrap"; 
-    cardContainer.style.gap = "20px"; 
+    cardContainer.style.gap = "20px";
+    cardContainer.style.marginTop="60px";
     cardContainer.style.justifyContent = "center"; 
     if (!type || !Array.isArray(type)) {
         console.error("Invalid type array");
@@ -675,6 +676,7 @@ post.addEventListener("click", async (e) => {
 let cart = document.getElementById("cart");
 cart.addEventListener("click", async () => {
     mainbody.innerHTML = ""; // Clear the mainbody before displaying cart items
+    // footer.innerHTML="";
     async function calculateCartTotal() {
         try {
             const user = auth.currentUser;
@@ -914,7 +916,7 @@ cart.addEventListener("click", async () => {
                     <p class="card-text flex-grow-1">${item.description}</p>
                     <p class="text-primary fw-bold">$${Number(item.price).toFixed(2)}</p>
                     <div class="d-flex justify-content-between mt-3">
-                        <button class="btn btn-success">
+                        <button class="btn btn-success" id="buynow">
                             <i class="fas fa-shopping-bag"></i> Buy Now
                         </button>
                         <button class="btn btn-danger remove-item" id="remove" data-key="${item.key}" data-price="${item.price}">
@@ -926,7 +928,11 @@ cart.addEventListener("click", async () => {
     
             col.appendChild(cartItem);
             row.appendChild(col);
-
+            cartItem.querySelector("#buynow").addEventListener("click", () => {
+                const proceedToOrder = new bootstrap.Modal(document.getElementById("addressModal"));
+                proceedToOrder.show();
+                
+            });
             const user = auth.currentUser;
             const cartRef = ref(database, `users/${user.uid}/cart`);
             cartItem.querySelector("#remove").addEventListener("click",()=>{
@@ -1019,49 +1025,49 @@ mainBody.appendChild(totalSection);
     }
     
     
-    async function removeFromCart(itemKey, itemPrice) {
-        try {
-            const user = auth.currentUser;
-            if (!user) {
-                alert("Please log in to manage your cart.");
-                return;
-            }
+    // async function removeFromCart(itemKey, itemPrice) {
+    //     try {
+    //         const user = auth.currentUser;
+    //         if (!user) {
+    //             alert("Please log in to manage your cart.");
+    //             return;
+    //         }
     
-            const itemRef = ref(database, `users/${user.uid}/cart/${itemKey}`);
-            await remove(itemRef);
-            console.log("Removing item from path:", `users/${user.uid}/cart/${itemKey}`);
+    //         const itemRef = ref(database, `users/${user.uid}/cart/${itemKey}`);
+    //         await remove(itemRef);
+    //         console.log("Removing item from path:", `users/${user.uid}/cart/${itemKey}`);
 
     
-            // Update the total immediately
-            const currentTotal = document.getElementById('cartTotal');
-            if (currentTotal) {
-                const totalPrice = Number(currentTotal.textContent.replace('$', ''));
-                const newTotal = totalPrice - itemPrice;
-                currentTotal.textContent = `$${newTotal.toFixed(2)}`;
-            }
+    //         // Update the total immediately
+    //         const currentTotal = document.getElementById('cartTotal');
+    //         if (currentTotal) {
+    //             const totalPrice = Number(currentTotal.textContent.replace('$', ''));
+    //             const newTotal = totalPrice - itemPrice;
+    //             currentTotal.textContent = `$${newTotal.toFixed(2)}`;
+    //         }
     
-            // Refresh the entire cart display if the total is 0
-            if (currentTotal && currentTotal.textContent === '$0.00') {
-                await displayCartItems();
-            } else {
-                // Remove just the card element
-                // console.log("Removing item with key:", itemKey);
-                // console.log("Item element in DOM:", document.querySelector(`[data-key="${itemKey}"]`));
-                // const cardElement = document.querySelector(`[data-key=${itemKey}]`).closest('.col');
-                // cardElement.remove();
+    //         // Refresh the entire cart display if the total is 0
+    //         if (currentTotal && currentTotal.textContent === '$0.00') {
+    //             await displayCartItems();
+    //         } else {
+    //             // Remove just the card element
+    //             // console.log("Removing item with key:", itemKey);
+    //             // console.log("Item element in DOM:", document.querySelector(`[data-key="${itemKey}"]`));
+    //             // const cardElement = document.querySelector(`[data-key=${itemKey}]`).closest('.col');
+    //             // cardElement.remove();
 
-                // new code
-                const cardElement = document.querySelector(`[data-key="${itemKey}"]`).closest('.card')
-                cardElement.remove();
-            }
+    //             // new code
+    //             // const cardElement = document.querySelector(`[data-key="${itemKey}"]`).closest('.card')
+    //             // cardElement.remove();
+    //         }
     
-            alert("Item removed from cart.");
-        } catch (error) {
-            console.log(error)
-            console.error("Error removing item from cart:", error);
-            alert("Failed to remove item from cart.");
-        }
-    }
+    //         alert("Item removed from cart.");
+    //     } catch (error) {
+    //         console.log(error)
+    //         console.error("Error removing item from cart:", error);
+    //         alert("Failed to remove item from cart.");
+    //     }
+    // }
 
     // async function removeFromCart(itemKey) {
     //     try {
@@ -1173,3 +1179,9 @@ document.querySelector("#addressModal .btn-primary").addEventListener("click",  
       })
 
 });
+
+
+let ArtistryHub=document.getElementById("ArtistryHub")
+ArtistryHub.addEventListener("click",()=>{
+    location.href="main.html"
+})

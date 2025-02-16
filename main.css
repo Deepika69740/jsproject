@@ -5,3 +5,48 @@
     gap: 50px;
     margin-top: 80px;
 } */
+
+
+
+@media screen and (max-width: 425vw) {
+    .collapse{
+       height: 1000px !important; 
+    }
+    .image-container .image-item img {
+        width: 80% !important;
+        height: 100% !important;
+        margin-top: 1.5rem;
+    }
+        .image-container .image-item button {
+            bottom: -20px;
+            padding: 0px 8px;
+            font-size: 0.8rem;
+        }
+    
+    .explore-btn{
+        height: 15px;
+        width: 50px;
+        font-size: 10px !important;
+    }
+    #about{
+        margin-top: 50px;
+        font-size: 15px;
+    }
+    #welcome{
+        font-size: 10px;
+    }
+    #copy{
+        font-size: 10px !important;
+    }
+    #container{
+        height: 20% !important;
+    }
+    .bg-dark{
+        height: 100px;
+    }
+}
+@media screen and (min-width:426px) and (max-width:725vw){
+    .collapse{
+        height: 100% !important; 
+     }
+}

@@ -17,7 +17,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link rel="stylesheet" href="./main.css">
 
-    <style>
+    <!-- <style>
         #main{
             margin-top: 100px;
         }
@@ -74,7 +74,7 @@
             margin-top: 1.5rem;
         }
 
-        .image-container .image-item button {
+        /* .image-container .image-item button {
             position: absolute;
             bottom: 10px;
             left: 50%;
@@ -85,8 +85,8 @@
             padding: 8px 16px;
             font-size: 1rem;
             border-radius: 5px;
-        }
-    </style>
+        } */
+    </style> -->
 </head>
 
 <body>
@@ -243,14 +243,11 @@
 </div>
     
 
-
-
-
-  <div class="modal" id="addressModal" tabindex="-1" class="address">
+<div class="modal" id="addressModal" tabindex="-1" class="address">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Address</h5>
+                <h5 class="modal-title">Address & Payment Details</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -276,7 +273,31 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Payment Details -->
+                <div class="mb-4">
+                    <h6>Payment Details</h6>
+                    <div class="mb-2">
+                        <label for="cardName" class="form-label">Cardholder Name</label>
+                        <input type="text" class="form-control" id="cardName">
+                    </div>
+                    <div class="mb-2">
+                        <label for="cardNumber" class="form-label">Card Number</label>
+                        <input type="text" class="form-control" id="cardNumber" maxlength="16" placeholder="1234 5678 9012 3456">
+                    </div>
+                    <div class="row">
+                        <div class="col-6 mb-2">
+                            <label for="expDate" class="form-label">Expiration Date</label>
+                            <input type="text" class="form-control" id="expDate" placeholder="MM/YY">
+                        </div>
+                        <div class="col-6 mb-2">
+                            <label for="cvv" class="form-label">CVV</label>
+                            <input type="text" class="form-control" id="cvv" maxlength="3" placeholder="123">
+                        </div>
+                    </div>
+                </div>
             </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary">Save</button>
@@ -284,6 +305,7 @@
         </div>
     </div>
 </div>
+
 
 
 

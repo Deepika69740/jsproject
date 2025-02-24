@@ -1,3 +1,71 @@
+#main{
+    margin-top: 100px;
+}
+.nav-item {
+    margin: 0px 12px;
+    font-size: 1.2rem;
+}
+
+.fas {
+    font-size: 1.2rem;
+}
+
+nav {
+    font-size: 1.3rem;
+}
+
+.navbar-brand {
+    font-size: 2.3rem;
+}
+
+.input-group .form-control {
+    border-radius: 20px 0 0 20px;
+}
+
+.input-group .btn {
+    border-radius: 0 20px 20px 0;
+}
+
+.input-group .btn {
+    background-color: transparent;
+    border-color: gray;
+    color: lightslategray;
+}
+
+.carousel-item > img {
+    padding-top: 60px;
+    height: 70vh;
+}
+
+.image-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+.image-container .image-item {
+    position: relative;
+    width: 30%;
+}
+
+.image-container .image-item img {
+    width: 100%;
+    height: 500px;
+    margin-top: 1.5rem;
+}
+
+.image-container .image-item button {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #F08080;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 1rem;
+    border-radius: 5px;
+}
 /* .cardContainer {
     display: flex;
     justify-content: center;
@@ -5,48 +73,46 @@
     gap: 50px;
     margin-top: 80px;
 } */
-
-
-
-@media screen and (max-width: 425vw) {
+footer{
+    margin-top: 50px;
+}
+@media screen and (max-width: 425px) {
     .collapse{
-       height: 1000px !important; 
+       height: auto !important; 
     }
-    .image-container .image-item img {
-        width: 80% !important;
-        height: 100% !important;
-        margin-top: 1.5rem;
+    .carousel-item > img {
+        padding-top: 60px;
+        height: 35vh;
     }
-        .image-container .image-item button {
-            bottom: -20px;
-            padding: 0px 8px;
-            font-size: 0.8rem;
-        }
-    
-    .explore-btn{
-        height: 15px;
-        width: 50px;
-        font-size: 10px !important;
+    .image-container{
+        flex-wrap:wrap ;
+        gap: 20px;
+        justify-content: center;
     }
-    #about{
-        margin-top: 50px;
-        font-size: 15px;
+    .image-container .image-item {
+        width: 80%;
     }
-    #welcome{
-        font-size: 10px;
-    }
-    #copy{
-        font-size: 10px !important;
-    }
-    #container{
-        height: 20% !important;
-    }
-    .bg-dark{
-        height: 100px;
+    .image-container .image-item button{
+        bottom: 50px;
     }
 }
-@media screen and (min-width:426px) and (max-width:725vw){
+@media screen and (min-width:425px) and (max-width:725px){
     .collapse{
-        height: 100% !important; 
+        height: auto !important; 
+     }
+     .carousel-item > img {
+         padding-top: 60px;
+         height: 35vh;
+     }
+     .image-container{
+         flex-wrap:wrap ;
+         gap: 20px;
+         /* justify-content: center; */
+     }
+     .image-container .image-item {
+         width: 45%;
+     }
+     .image-container .image-item button{
+         bottom: 50px;
      }
 }

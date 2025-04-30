@@ -3,77 +3,512 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>singup page</title>
-  <link rel="stylesheet" href="navbar.css">
+  <!-- <title>ArtistryHub - Connect with Artists Worldwide</title> -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-  <script type="module" src="navbar.js"></script>
+  <style>
+    :root {
+      --primary-color: #4a6fa5;
+      --secondary-color: #3a5a8a;
+      --accent-color: #ff7e5f;
+      --dark-color: #2c3e50;
+      --light-color: #f8f9fa;
+      --text-color: #333;
+      --text-light: #6c757d;
+    }
+    
+    body {
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+    
+    .navbar {
+      background-color: white;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: var(--dark-color);
+      display: flex;
+      align-items: center;
+    }
+    
+    .navbar-brand span {
+      color: var(--primary-color);
+    }
+    
+    .navbar-brand i {
+      margin-right: 10px;
+      color: var(--accent-color);
+    }
+    
+    .hero-section {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+      padding: 80px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 40%;
+      height: 100%;
+      background: linear-gradient(to left, var(--primary-color), transparent);
+      opacity: 0.1;
+      z-index: 0;
+    }
+    
+    .hero-title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--dark-color);
+      position: relative;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.3rem;
+      color: var(--text-light);
+      margin-bottom: 30px;
+      position: relative;
+    }
+    
+    .feature-card {
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      height: 100%;
+      padding: 30px;
+      background: white;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+    
+    .feature-icon {
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+    }
+    
+    .btn-primary, .cta-button, #emailSignupButton, #btns {
+      background-color: var(--primary-color);
+      border: none;
+      padding: 12px 30px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.3s;
+      color: white;
+    }
+    
+    .btn-primary:hover, .cta-button:hover, #emailSignupButton:hover, #btns:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(74, 111, 165, 0.3);
+    }
+    
+    #singup, #login, #guest {
+      padding: 10px 25px;
+      border-radius: 50px;
+      font-weight: 500;
+      margin: 5px;
+      transition: all 0.3s;
+    }
+    
+    #singup, #login {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+    }
+    
+    #singup:hover, #login:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-2px);
+    }
+    
+    #guest {
+      background-color: transparent;
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
+    }
+    
+    #guest:hover {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .modal-content {
+      border-radius: 15px;
+      border: none;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+    
+    .modal-header {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    
+    .modal-title {
+      color: var(--dark-color);
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+    
+    .footer {
+      background-color: var(--dark-color);
+      color: white;
+      padding: 30px 0;
+      text-align: center;
+    }
+    
+    .footer p {
+      margin-bottom: 0;
+    }
+    
+    /* Responsive adjustments */
+    @media (min-width: 992px) {
+      .hero-title {
+        font-size: 2.4rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .hero-section::before {
+        width: 60%;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .why-choose{
+        font-size: 1rem !important;
+      }
+      .global {
+        font-size: 1rem;
+      }
+      .globalcontent{
+        font-size: 0.8rem;
+      }
+      .hero-section {
+        padding: 60px 0;
+      }
+      
+      .hero-title {
+        font-size: 2rem;
+      }
+      
+      .feature-card {
+        margin-bottom: 20px;
+      }
+      
+      #singup, #login, #guest {
+        padding: 8px 20px;
+        font-size: 0.9rem;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .hero-section {
+        padding: 40px 0;
+      }
+      
+      .hero-title {
+        font-size: 1.8rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+      
+      .hero-section::before {
+        width: 80%;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div class="container text-center mt-5">
-    <h1 class="art">Welcome To ArtistryHub</h1>
-    <p class="emp">Empowering Artists Everywhere</p>
-        <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#signupModal" style="background-color:grey; border: none;" id="singup">Signup</button>
-        <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#loginModal" style="background-color:grey; border:none;" id="login">Login</button>
-        <p class="sin">Don't have an account? <a href="#" id="sin">Sign up</a> now!</p> 
-        <p class="log">Already have an account? <a href="#" id="log">Log In</a></p>
-        <button id="guest">Guest Login</button>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <i class="fas fa-palette"></i>Artistry<span>Hub</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <button class="btn" id="login" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+          </li>
+          <li class="nav-item">
+            <button class="btn" id="singup" data-bs-toggle="modal" data-bs-target="#signupModal">Sign Up</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-   </div>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h1 class="hero-title">The Global Marketplace for Artists</h1>
+          <p class="hero-subtitle">Sell your art, connect with buyers worldwide, and grow your creative business from anywhere.</p>
+          <div class="d-flex gap-3">
+            <button class="btn btn-primary" id="singup" data-bs-toggle="modal" data-bs-target="#signupModal">Get Started</button>
+          </div>
+          <!-- <button id="guest" class="mt-2">Guest Login</button> -->
+        </div>
+        <div class="col-lg-6">
+          <img src="https://cdn.pixabay.com/photo/2022/03/24/22/57/online-shop-7090027_1280.png" 
+               alt="Artwork showcase" class="img-fluid rounded-3 shadow">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row text-center mb-5">
+        <div class="col">
+          <h2 class="why-choose">Why Choose ArtistryHub?</h2>
+          <p class="text-muted">Discover the perfect platform for your creative journey</p>
+        </div>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-globe"></i>
+            </div>
+            <h3 class="global">Global Reach</h3>
+            <p class="globalcontent">Connect with art lovers from around the world and expand your audience beyond local markets.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-upload"></i>
+            </div>
+            <h3 class="global">Easy Upload</h3>
+            <p class="globalcontent">Upload your artwork in seconds with our intuitive platform. Manage your portfolio from anywhere.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3 class="global">Secure Payments</h3>
+            <p class="globalcontent">Get paid securely through our trusted payment system with multiple currency support.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 ArtistryHub. All rights reserved.</p>
+      <div class="mt-3">
+        <a href="#" class="text-white mx-2"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="text-white mx-2"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="text-white mx-2"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="text-white mx-2"><i class="fab fa-pinterest"></i></a>
+      </div>
+    </div>
+  </footer>
 
   <!-- Signup Modal -->
-  <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true" id="bg">
-    <div class="modal-dialog">
+  <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="signupModalLabel">Signup</h5>
+          <h5 class="modal-title" id="signupModalLabel">Create Your Account</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form id="signupForm">
             <div class="mb-3">
-              <label for="signupEmail" class="form-label">Email address</label>
+              <label for="signupEmail" class="form-label">Email</label>
               <input type="email" class="form-control" id="signupEmail" required>
             </div>
             <div class="mb-3">
               <label for="signupPassword" class="form-label">Password</label>
               <input type="password" class="form-control" id="signupPassword" required>
             </div>
-            <button type="button" class="btn btn-primary" id="emailSignupButton" style="background-color: grey; border: none;">Signup</button>
+            <button type="button" class="btn btn-primary w-100" id="emailSignupButton">Sign Up</button>
           </form>
+          <p class="text-center mt-3">Already have an account? <a href="#" id="log" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">Log In</a></p>
         </div>
       </div>
     </div>
   </div>
+
   <!-- Login Modal -->
   <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="loginModalLabel">Login</h5>
+          <h5 class="modal-title" id="loginModalLabel">Welcome Back</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form id="loginForm">
             <div class="mb-3">
-              <label for="loginEmail" class="form-label">Email address</label>
+              <label for="loginEmail" class="form-label">Email</label>
               <input type="email" class="form-control" id="loginEmail" required>
             </div>
             <div class="mb-3">
               <label for="loginPassword" class="form-label">Password</label>
               <input type="password" class="form-control" id="loginPassword" required>
             </div>
-            <button type="button" class="btn btn-secondary" id="btns" style="background-color: grey; border: none;">Login</button>
+            <button type="button" class="btn btn-primary w-100" id="btns">Login</button>
+            <button id="guest" class="mt-2">Guest Login</button>
+
           </form>
+          <p class="text-center mt-3">New to ArtistryHub? <a href="#" id="sin" data-bs-toggle="modal" data-bs-target="#signupModal" data-bs-dismiss="modal">Sign up</a></p>
         </div>
       </div>
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
 
+    const firebaseConfig = {
+      apiKey: "AIzaSyCVPdMv4iTpI19dax30goQhEksjnuXzhHw",
+      authDomain: "navb-5c270.firebaseapp.com",
+      projectId: "navb-5c270",
+      storageBucket: "navb-5c270.firebasestorage.app",
+      messagingSenderId: "467288180177",
+      appId: "1:467288180177:web:c0385252c8beb466088cf0"
+    };
 
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
 
+    // Signup Event
+    document.getElementById("emailSignupButton").addEventListener("click", () => {
+      const email = document.getElementById("signupEmail").value;
+      const pass = document.getElementById("signupPassword").value;
 
+      if (email === "" || pass === "") {
+        Swal.fire({
+          icon: "error",
+          title: "Input Error",
+          text: "Please enter both email and password."
+        });
+        return;
+      }
+
+      createUserWithEmailAndPassword(auth, email, pass)
+        .then((userCredential) => {
+          document.getElementById("signupEmail").value = "";
+          document.getElementById("signupPassword").value = "";
+          Swal.fire({
+            title: "Signup Successful!",
+            text: "Please login with your credentials.",
+            icon: "success"
+          }).then(() => {
+            const signupModal = bootstrap.Modal.getInstance(document.getElementById("signupModal"));
+            signupModal.hide();
+            const loginModal = new bootstrap.Modal(document.getElementById("loginModal"));
+            loginModal.show();
+          });
+        })
+        .catch((error) => {
+          Swal.fire({
+            icon: "error",
+            title: "Signup Error",
+            text: error.message
+          });
+        });
+    });
+
+    // Login Event
+    document.getElementById("btns").addEventListener("click", () => {
+      const email = document.getElementById("loginEmail").value;
+      const pass = document.getElementById("loginPassword").value;
+
+      if (email === "" || pass === "") {
+        Swal.fire({
+          icon: "error",
+          title: "Input Error",
+          text: "Please enter both email and password."
+        });
+        return;
+      }
+
+      signInWithEmailAndPassword(auth, email, pass)
+        .then((userCredential) => {
+          document.getElementById("loginEmail").value = "";
+          document.getElementById("loginPassword").value = "";
+          Swal.fire({
+            title: "Login Successful!",
+            icon: "success"
+          }).then(() => {
+            window.location.href = "main.html";
+          });
+        })
+        .catch((error) => {
+          document.getElementById("loginEmail").value = "";
+          document.getElementById("loginPassword").value = "";
+          Swal.fire({
+            icon: "error",
+            title: "Login Error",
+            text: error.message
+          }).then(() => {
+            const loginModal = bootstrap.Modal.getInstance(document.getElementById("loginModal"));
+            loginModal.show();
+          });
+        });
+    });
+
+    // Link handlers
+    document.getElementById("log").addEventListener("click", () => {
+      const loginModal = new bootstrap.Modal(document.getElementById("loginModal"));
+      loginModal.show();
+    });
+
+    document.getElementById("sin").addEventListener("click", () => {
+      const signupModal = new bootstrap.Modal(document.getElementById("signupModal"));
+      signupModal.show();
+    });
+
+    // Guest login
+    document.getElementById("guest").addEventListener("click", () => {
+      location.href = 'main.html';
+    });
+  </script>
 </body>
 </html>

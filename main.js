@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-import { getDatabase, ref, set, get ,push , update,remove}  from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
+import { getDatabase, ref, set, get, push, update, remove } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCVPdMv4iTpI19dax30goQhEksjnuXzhHw",
@@ -14,17 +14,18 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const database = getDatabase(app);
 
-let art = []
-let dresses = []
-let gifts = []
+let art = [];
+let dresses = [];
+let gifts = [];
+
 async function fetchData() {
     try {
       const snapshot = await get(ref(database, "artyhub"));
       if (snapshot.exists()) {
-        let data = snapshot.val()
-        art = data.art;
-        dresses = data.dresses;
-        gifts = data.gifts;
+        let data = snapshot.val();
+        art = data.art || [];
+        dresses = data.dresses || [];
+        gifts = data.gifts || [];
         return snapshot.val();
       } else {
         console.error("No data available.");
@@ -34,290 +35,27 @@ async function fetchData() {
       console.error("Error fetching data:", error);
       return {};
     }
+}
 
-  }
+await fetchData();
 
-  await fetchData()
-// const  art= [
-//     {
-//       "id": 1,
-//       "title": "Abstract Painting",
-//       "description": "A beautiful abstract painting with vibrant colors.",
-//       "price": 120.00,
-//       "image": "https://www.pictureframesexpress.co.uk/blog/wp-content/uploads/2020/05/7-Tips-to-Finding-Art-Inspiration-Header-1024x649.jpg",
-//       "category": "art"
-//     },
-//     {
-//       "id": 2,
-//       "title": "Landscape Canvas",
-//       "description": "A serene landscape canvas perfect for home decor.",
-//       "price": 200.00,
-//       "image": "https://media.istockphoto.com/photos/mind-painting-background-picture-id469036036?k=6&m=469036036&s=612x612&w=0&h=8fjVzPQyyyyksbu0XLpanABsJ8uUHlN6vvasA2GU50w=",
-//       "category": "art"
-//     },
-//     {
-//       "id": 3,
-//       "title": "Modern Art Piece",
-//       "description": "An eye-catching modern art piece for contemporary spaces.",
-//       "price": 180.00,
-//       "image": "https://photofocus.com/wp-content/uploads/2022/08/kenlee-AI-generated-art-drawing-man-forest-Midjourney-HEADER-PHOTOFOCUS.jpg",
-//       "category": "art"
-//     },
-//     {
-//       "id": 4,
-//       "title": "Portrait Sketch",
-//       "description": "A detailed portrait sketch with intricate strokes.",
-//       "price": 150.00,
-//       "image": "https://wallpapers.com/images/file/abstract-art-pictures-a7sxgksf06iigkzt.jpg",
-//       "category": "art"
-//     },
-//     {
-//       "id": 5,
-//       "title": "Acrylic Artwork",
-//       "description": "A vibrant acrylic artwork showcasing bold patterns.",
-//       "price": 220.00,
-//       "image": "https://tse4.mm.bing.net/th?id=OIP.dZRdpGucdIepN3NjzSNkEwHaEo&pid=Api&P=0&h=180",
-//       "category": "art"
-//     },
-//     {
-//       "id": 6,
-//       "title": "Floral Watercolor",
-//       "description": "A delicate floral watercolor painting.",
-//       "price": 95.00,
-//       "image": "https://static.vecteezy.com/system/resources/previews/021/924/397/large_2x/beautiful-kathak-dance-painting-fine-art-generative-ai-photo.jpg",
-//       "category": "art"
-//     },
-//     {
-//       "id": 7,
-//       "title": "Abstract Wall Art",
-//       "description": "A stunning piece of abstract wall art for living spaces.",
-//       "price": 175.00,
-//       "image": "https://i1.wp.com/joyacousin.com/wp-content/uploads/2017/10/20171020_145612-01.jpg",
-//       "category": "art"
-//     },
-//     {
-//       "id": 8,
-//       "title": "Cubism Painting",
-//       "description": "A unique cubism painting inspired by Picasso.",
-//       "price": 300.00,
-//       "image": "https://wallpaperset.com/w/full/5/c/2/51687.jpg",
-//       "category": "art"
-//     },
-//     {
-//       "id": 9,
-//       "title": "Minimalist Art",
-//       "description": "A minimalist art piece with clean lines and subtle colors.",
-//       "price": 140.00,
-//       "image": "https://wallpaperset.com/w/full/5/c/2/51687.jpg",
-//       "category": "art"
-//     },
-//     {
-//       "id": 10,
-//       "title": "Nature-Inspired Artwork",
-//       "description": "An artwork inspired by the beauty of nature.",
-//       "price": 210.00,
-//       "image": "http://thewowstyle.com/wp-content/uploads/2015/01/art-gallery-josephine-wall-paintings-565-2.jpg",
-//       "category": "art"
-//     }
-//   ]
-//  const dresses=[
-//     {
-//       "id": 1,
-//       "title": "Summer Dress",
-//       "description": "A light and breezy summer dress in pastel shades.",
-//       "price": 50.00,
-//       "image": "https://4.bp.blogspot.com/-c22VALZlh9Y/UVqht3tQdTI/AAAAAAAAAEU/JdXb11t4tE4/s1600/9564-Sapphire.jpg",
-//       "category": "dresses"
-//     },
-//     {
-//       "id": 2,
-//       "title": "Evening Gown",
-//       "description": "An elegant evening gown for formal occasions.",
-//       "price": 150.00,
-//       "image": "https://cdn.shopify.com/s/files/1/0624/2382/6609/products/heavenly-dress-PG-F2038-a_1200x1999.jpg?v=1664919935",
-//       "category": "dresses"
-//     },
-//     {
-//       "id": 3,
-//       "title": "Casual Maxi Dress",
-//       "description": "A comfortable maxi dress for casual outings.",
-//       "price": 80.00,
-//       "image": "https://images.surferseo.art/e95004aa-62ea-49d4-98eb-81ee6356286a.jpeg",
-//       "category": "dresses"
-//     },
-//     {
-//       "id": 4,
-//       "title": "Cocktail Dress",
-//       "description": "A chic cocktail dress for evening parties.",
-//       "price": 130.00,
-//       "image": "https://i.pinimg.com/originals/00/68/df/0068df40c07620f3bdff921369583acf.jpg",
-//       "category": "dresses"
-//     },
-//     {
-//       "id": 5,
-//       "title": "Floral Midi Dress",
-//       "description": "A floral midi dress perfect for springtime.",
-//       "price": 90.00,
-//       "image": "https://i.pinimg.com/736x/0d/6a/e4/0d6ae4629876b973da21422640951df5.jpg",
-//       "category": "dresses"
-//     },
-//     {
-//       "id": 6,
-//       "title": "Bohemian Dress",
-//       "description": "A flowing bohemian dress with earthy tones.",
-//       "price": 110.00,
-//       "image": "https://cdn.shopify.com/s/files/1/0276/8666/6376/files/Silver_Lehenga_10_30d78b06-1751-445a-a573-7de208c01481_2048x2048.jpg?v=1595932069",
-//       "category": "dresses"
-//     },
-//     {
-//       "id": 7,
-//       "title": "Formal Office Dress",
-//       "description": "A formal dress suitable for office wear.",
-//       "price": 100.00,
-//       "image": "https://images.surferseo.art/e95004aa-62ea-49d4-98eb-81ee6356286a.jpeg",
-//       "category": "dresses"
-//     },
-//     {
-//       "id": 8,
-//       "title": "Party Dress",
-//       "description": "A stylish party dress with sequins.",
-//       "price": 170.00,
-//       "image": "https://i.pinimg.com/originals/db/a3/ba/dba3badc8ff56e8c5781bf2d5634496f.jpg",
-//       "category": "dresses"
-//     },
-//     {
-//       "id": 9,
-//       "title": "Winter Sweater Dress",
-//       "description": "A cozy sweater dress for the colder months.",
-//       "price": 120.00,
-//       "image": "https://i.pinimg.com/originals/0f/38/e5/0f38e54e1f31694f87bea08c88fb4849.jpg",
-//       "category": "dresses"
-//     },
-//     {
-//       "id": 10,
-//       "title": "Vintage Dress",
-//       "description": "A retro-style vintage dress with polka dots.",
-//       "price": 140.00,
-//       "image": "https://i.pinimg.com/736x/b6/5a/b8/b65ab89bfc23d24aabf1c8a154d3e779.jpg",
-//       "category": "dresses"
-//     }
-//   ]
-//   const gifts =[
-//     {
-//       "id": 1,
-//       "title": "Bag",
-//       "description": "A delightful Black bag with hanging.",
-//       "price": 75.00,
-//       "image": "https://endurapack.com/wp-content/uploads/CCT911Bblackptd.jpg",
-//       "category": "gifts"
-//     },
-//     {
-//       "id": 2,
-//       "title": "Bag",
-//       "description": "A grey desined bag.",
-//       "price": 25.00,
-//       "image": "https://m.media-amazon.com/images/I/71GS5ZrIKRS.AC_UL1500.jpg",
-//       "category": "gifts"
-//     },
-//   {
-//     "id": 3,
-//     "title": "Bag",
-//     "description": "A soft bag for all ages.",
-//     "price": 30.00,
-//     "image": "https://tse4.mm.bing.net/th?id=OIP.yl0ZNuK_3lYgcmqsysS8OAHaFj&pid=Api&P=0&h=180",
-//     "category": "gifts"
-//   },
-//   {
-//     "id": 4,
-//     "title": "Bag",
-//     "description": "A bag with blue color design",
-//     "price": 40.00,
-//     "image": "https://i.pinimg.com/originals/52/3c/00/523c007185cdd2813691ca0ee5557e5f.jpg",
-//     "category": "gifts"
-//   },
-//   {
-//    "id": 5,
-//     "title":"bracelite",
-//     "description": "A beautifully designed bracelite to cherish memories.",
-//     "price": 35.00,
-//     "image": "https://tse3.mm.bing.net/th?id=OIP.doCu2593kGeSf9kMKkN1sQHaE8&pid=Api&P=0&h=180",
-//     "category": "gifts"
-//   },
-//   {
-//     "id": 6,
-//     "title": "bracelite",
-//     "description": "A custom bracelite with engraving options.",
-//     "price": 15.00,
-//     "image": "https://tse4.mm.bing.net/th?id=OIP.9QJSXCB52T94Q-gGJL4cPwHaFP&pid=Api&P=0&h=180",
-//     "category": "gifts"
-//   },
-//   {
-//     "id": 7,
-//     "title": "bracelite",
-//     "description": "A gold bracelite for special occasions.",
-//     "price": 50.00,
-//     "image": "https://tse2.mm.bing.net/th?id=OIP.Q0y-nxDl9vNvIi9D8NOztAAAAA&pid=Api&P=0&h=180",
-//     "category": "gifts"
-//   },
-//   {
-//     "id": 8,
-//     "title": "cellphone cover",
-//     "description": "A set of elegant cellphone cover.",
-//     "price": 20.00,
-//     "image": "https://tse2.mm.bing.net/th?id=OIP.ZdExKmA9cCRMRyQyfqgJKwHaHa&pid=Api&P=0&h=180",
-//     "category": "gifts"
-//   },
-//   {
-//     "id": 9,
-//     "title": "Cellphone cover",
-//     "description": "A pink phone cover with heart symbol",
-//     "price": 60.00,
-//     "image": "https://img.ltwebstatic.com/images3_pi/2023/02/14/1676371123ea47dceaa6477d2d14f29e28c4616919_thumbnail_600x.jpg",
-//     "category": "gifts"
-//   },
-//   {
-//     "id": 10,
-//     "title": "Cellphone cover",
-//     "description": "A white phone cover with design.",
-//     "price": 45.00,
-//     "image": "https://i.etsystatic.com/25495567/r/il/4d7a4b/3226702338/il_1588xN.3226702338_ilxk.jpg",
-//     "category": "gifts"
-//   }
-
-// ]
-
-// let postForm = document.getElementById("pBtn");
-//             postForm.addEventListener("click", async (e) => {
-//               e.preventDefault();
-//               await set(ref(database, "artyhub"), {
-//                 art: art,
-//                 dresses: dresses,
-//                 gifts: gifts
-//               }).then(() => {
-//                 alert("Job posted successfully");
-//               });
-//             });
-
-document.getElementById("dress").addEventListener("click",()=>main(dresses))
-document.getElementById("gift1").addEventListener("click",()=>main(gifts))
-document.getElementById("art").addEventListener("click",()=>main(art))
-document.getElementById("gift2").addEventListener("click",()=>main(gifts))
-// let gift = document.querySelectorAll(".gift")
-// console.log(gift);
-// gift.addEventListener("click",()=>main(gifts))
+document.getElementById("dress").addEventListener("click", () => main(dresses));
+document.getElementById("gift1").addEventListener("click", () => main(gifts));
+document.getElementById("art").addEventListener("click", () => main(art));
+document.getElementById("gift2").addEventListener("click", () => main(gifts));
 
 function main(type = null) {
     const mainBody = document.getElementById('mainbody');
     mainBody.innerHTML = "";
 
-    // Create a container for cards
     let cardContainer = document.createElement("div");
     cardContainer.className = "cardContainer";
     cardContainer.style.display = "flex";
-    cardContainer.style.flexWrap = "wrap"; 
+    cardContainer.style.flexWrap = "wrap";
     cardContainer.style.gap = "20px";
-    cardContainer.style.marginTop="60px";
-    cardContainer.style.justifyContent = "center"; 
+    cardContainer.style.marginTop = "60px";
+    cardContainer.style.justifyContent = "center";
+
     if (!type || !Array.isArray(type)) {
         console.error("Invalid type array");
         return;
@@ -329,8 +67,8 @@ function main(type = null) {
         <div class="card" style="width: 300px; height: 500px; border: none; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 15px; background-color: #fff; transition: transform 0.3s ease; overflow: hidden; display: flex; flex-direction: column; align-items: center;">
             <h3 style="font-size: 1.2rem; font-weight: bold; color: #333;">${item.title}</h3>
             <img src="${item.image}" alt="${item.title}" style="width: 250px; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 15px;">
-            <p style="font-size: 1rem; color: #555; text-align: center;">${item.description}</p>
-            <p style="font-size: 1.1rem; font-weight: bold; color: #27ae60; text-align: center;">Price: $${item.price}</p>
+            <p style="font-size: 1rem; color: #555; text-align: center;">${item.description || ""}</p>
+            <p style="font-size: 1.1rem; font-weight: bold; color: #27ae60; text-align: center;">Price: ${Number(item.price).toFixed(2)}</p>
             <div style="display: flex; justify-content: space-between; width: 100%; padding: 10px;">
                 <button class="addToCartBtn" style="background-color: #3498db; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Add To Cart</button>
                 <button class="buyNowBtn" style="background-color: #e74c3c; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Buy Now</button>
@@ -352,12 +90,35 @@ function main(type = null) {
                 }
 
                 const cartRef = ref(database, `users/${user.uid}/cart`);
-                await push(cartRef, {
-                    ...item,
-                    price: Number(item.price) 
-                });
-
+                const snapshot = await get(cartRef);
+                let cartItems = snapshot.exists() ? snapshot.val() : {};
                 
+                // Check if item already exists in cart
+                let existingItemKey = null;
+                for (const [key, cartItem] of Object.entries(cartItems || {})) {
+                    if (cartItem.title === item.title && cartItem.category === item.category) {
+                        existingItemKey = key;
+                        break;
+                    }
+                }
+
+                if (existingItemKey) {
+                    // Update quantity and price
+                    const existingItem = cartItems[existingItemKey];
+                    const newQuantity = (existingItem.quantity || 1) + 1;
+                    await update(ref(database, `users/${user.uid}/cart/${existingItemKey}`), {
+                        quantity: newQuantity,
+                        price: Number(item.price) * newQuantity
+                    });
+                } else {
+                    // Add new item with quantity 1
+                    await push(cartRef, {
+                        ...item,
+                        price: Number(item.price),
+                        quantity: 1
+                    });
+                }
+
                 Swal.fire({
                     title: "Item Added!",
                     text: "Your item has been added to the cart.",
@@ -374,143 +135,7 @@ function main(type = null) {
         cardContainer.appendChild(card);
     });
 
-    mainBody.appendChild(cardContainer);  
-}
-
-
-
-
-
-
-
-
-searchInput.addEventListener("focus", async (e) => {
-    mainbody.innerHTML = ""; 
-    e.preventDefault();
-    displayItems([...art, ...dresses, ...gifts]);
-});
-
-searchInput.addEventListener("input", async (e) => {
-    mainbody.innerHTML = ""; 
-    e.preventDefault();
-
-    let searchTerm = searchInput.value.trim().toLowerCase();
-
-    if (searchTerm === "") {
-        displayItems([...art, ...dresses, ...gifts]);
-    } else {
-        // Filter items based on the search term (e.g., by category or title)
-        let filteredItems = [
-            ...art,
-            ...dresses,
-            ...gifts
-        ].filter(item => 
-            
-            item.category.toLowerCase().includes(searchTerm)
-        );
-
-        displayItems(filteredItems); // Display filtered items
-    }
-});
-
-function displayItems(items) {
-    const mainBody = document.getElementById('mainbody');
-    mainBody.innerHTML = "";
-
-    // Create container with animation
-    const container = document.createElement('div');
-    container.className = 'container mt-5 animate__animated animate__fadeIn';
-    container.style.paddingTop = '60px';
-
-    // Add category title
-    const titleElement = document.createElement('h2');
-    titleElement.className = 'text-center mb-4';
-    titleElement.textContent = `${items[0].category} Collection`;
-    container.appendChild(titleElement);
-
-    // Create row for cards
-    const row = document.createElement('div');
-    row.className = 'row g-5';
-
-    items.forEach(item => {
-        const col = document.createElement('div');
-        col.className = 'col-12 col-md-6 col-lg-4';
-
-        const card = document.createElement('div');
-        card.className = 'card h-100 shadow-sm';
-        item.price = Number(item.price);
-        card.innerHTML = `
-            <div class="">
-                <img src="${item.image}" 
-                     class="card-img-top" 
-                     alt="${item.title}" 
-                     style="height: 450px; object-fit: cover;">
-            </div>
-            <div class="card-body d-flex flex-column">
-                <h5 class="card-title">${item.title}</h5>
-                <p class="card-text flex-grow-1">${item.description}</p>
-                <p>$${item.price.toFixed(2)}</p>
-                <div class="d-flex justify-content-between mt-3">
-                    <button class="btn btn-outline-primary add-to-cart">
-                        <i class="fas fa-cart-plus"></i> Add To Cart
-                    </button>
-                    <button class="btn btn-success" id="buynow">
-                        <i class="fas fa-shopping-bag"></i> Buy Now
-                    </button>
-                </div>
-            </div>
-        `;
-        card.querySelector("#buynow").addEventListener("click", () => {
-            const proceedToOrder = new bootstrap.Modal(document.getElementById("addressModal"));
-            proceedToOrder.show();
-            
-        });
-        // Add hover effect
-        card.addEventListener('mouseenter', () => {
-            card.classList.add('shadow');
-            card.style.transform = 'translateY(-5px)';
-            card.style.transition = 'all 0.3s ease';
-        });
-
-        card.addEventListener('mouseleave', () => {
-            card.classList.remove('shadow');
-            card.style.transform = 'translateY(0)';
-        });
-
-        // Add to Cart Button Event Listener
-        const addToCartButton = card.querySelector('.add-to-cart');
-        addToCartButton.addEventListener('click', async () => {
-            try {
-                const user = auth.currentUser;
-                if (!user) {
-                    alert("Please log in to add items to the cart.");
-                    return;
-                }
-
-                // Reference to the user's cart in Firebase
-                const cartRef = ref(database, `users/${user.uid}/cart`);
-
-                // Push the item to the cart
-                await push(cartRef, item);
-                Swal.fire({             
-                                title: "Item Added!",             
-                                text: "Your item has been added to the cart.",             
-                                icon: "success",             
-                                confirmButtonText: "OK",             
-                                allowOutsideClick: false          
-                            });     
-            } catch (error) {
-                console.error("Error adding to cart:", error);
-                alert("Failed to add item to cart.");
-            }
-        });
-
-        col.appendChild(card);
-        row.appendChild(col);
-    });
-
-    container.appendChild(row);
-    mainBody.appendChild(container);
+    mainBody.appendChild(cardContainer);
 }
 
 document.getElementById("art1").addEventListener("click", (e) => {
@@ -528,35 +153,29 @@ document.getElementById("clothing").addEventListener("click", (e) => {
     displayCategoryItems(dresses, 'Dress Collection');
 });
 
-// Generic function to display category items
 function displayCategoryItems(items, categoryTitle) {
     const mainBody = document.getElementById('mainbody');
-    // Clear existing content
     mainBody.innerHTML = "";
     
-    // Create container with animation
     const container = document.createElement('div');
     container.className = 'container mt-5 animate__animated animate__fadeIn';
     container.style.paddingTop = '60px';
     
-    // Add category title
     const titleElement = document.createElement('h2');
     titleElement.className = 'text-center mb-4';
     titleElement.textContent = categoryTitle;
     container.appendChild(titleElement);
     
-    // Create row for cards
     const row = document.createElement('div');
     row.className = 'row g-5';
     
-    // Loop through items and create cards
     items.forEach(item => {
         const col = document.createElement('div');
         col.className = 'col-12 col-md-6 col-lg-4';
         
         const card = document.createElement('div');
         card.className = 'card h-100 shadow-sm';
-        item.price = Number(item.price)
+        item.price = Number(item.price);
         card.innerHTML = `
             <div class="">
                 <img src="${item.image}" 
@@ -566,8 +185,8 @@ function displayCategoryItems(items, categoryTitle) {
             </div>
             <div class="card-body d-flex flex-column">
                 <h5 class="card-title">${item.title}</h5>
-                <p class="card-text flex-grow-1">${item.description??"hello World"}</p>
-                <p>$${item.price.toFixed(2)}</p>
+                <p class="card-text flex-grow-1">${item.description || ""}</p>
+                <p>${item.price.toFixed(2)}</p>
                 <div class="d-flex justify-content-between mt-3">
                     <button class="btn btn-outline-primary" id="addToCart">
                         <i class="fas fa-cart-plus"></i> Add To Cart
@@ -578,13 +197,12 @@ function displayCategoryItems(items, categoryTitle) {
                 </div>
             </div>
         `;
+        
         card.querySelector("#buynow").addEventListener("click", () => {
             const proceedToOrder = new bootstrap.Modal(document.getElementById("addressModal"));
             proceedToOrder.show();
-            
         });
         
-        // Add hover effect
         card.addEventListener('mouseenter', () => {
             card.classList.add('shadow');
             card.style.transform = 'translateY(-5px)';
@@ -595,6 +213,7 @@ function displayCategoryItems(items, categoryTitle) {
             card.classList.remove('shadow');
             card.style.transform = 'translateY(0)';
         });
+        
         card.querySelector("#addToCart").addEventListener("click", async () => {
             try {
                 const user = auth.currentUser;
@@ -604,20 +223,45 @@ function displayCategoryItems(items, categoryTitle) {
                 }
         
                 const cartRef = ref(database, `users/${user.uid}/cart`);
-                await push(cartRef, item);
-                // alert("Item added to cart successfully!");
+                const snapshot = await get(cartRef);
+                let cartItems = snapshot.exists() ? snapshot.val() : {};
+                
+                let existingItemKey = null;
+                for (const [key, cartItem] of Object.entries(cartItems || {})) {
+                    if (cartItem.title === item.title && cartItem.category === item.category) {
+                        existingItemKey = key;
+                        break;
+                    }
+                }
+
+                if (existingItemKey) {
+                    const existingItem = cartItems[existingItemKey];
+                    const newQuantity = (existingItem.quantity || 1) + 1;
+                    await update(ref(database, `users/${user.uid}/cart/${existingItemKey}`), {
+                        quantity: newQuantity,
+                        price: Number(item.price) * newQuantity
+                    });
+                } else {
+                    await push(cartRef, {
+                        ...item,
+                        price: Number(item.price),
+                        quantity: 1
+                    });
+                }
+                
                 Swal.fire({             
-                                title: "Item Added!",             
-                                text: "Your item has been added to the cart.",             
-                                icon: "success",             
-                                confirmButtonText: "OK",             
-                                allowOutsideClick: false          
-                            });     
+                    title: "Item Added!",             
+                    text: "Your item has been added to the cart.",             
+                    icon: "success",             
+                    confirmButtonText: "OK",             
+                    allowOutsideClick: false          
+                });     
             } catch (error) {
                 console.error("Error adding to cart:", error);
                 alert("Failed to add item to cart.");
             }
         });
+        
         col.appendChild(card);
         row.appendChild(col);
     });
@@ -625,10 +269,11 @@ function displayCategoryItems(items, categoryTitle) {
     container.appendChild(row);
     mainBody.appendChild(container);
 }
-let post = document.getElementById("post");
+
+let post = document.getElementById("post"); 
 post.addEventListener("click", async (e) => {
     e.preventDefault();
-
+    
     let title = document.getElementById("title1").value;
     let url = document.getElementById("imageSrc1").value;
     let category = document.getElementById("category").value;
@@ -639,29 +284,48 @@ post.addEventListener("click", async (e) => {
         price: price,
         image: url,
     };
-
-    // Check if category is valid
+    
     if (["art", "gifts", "dresses"].includes(category)) {
         const db = getDatabase();
-        let categoryRef = ref(db, `artyhub/${category}`); // Reference category
-
+        let categoryRef = ref(db, `artyhub/${category}`);
+        
         try {
-            // Get existing data
             let snapshot = await get(categoryRef);
-            let existingData = snapshot.val() || []; // Default to empty array if null
-
-            // Ensure it's an array before pushing new data
-            // if (!Array.isArray(existingData)) {
-            //     existingData = Object.values(existingData); // Convert object back to an array
-            // }
-
-            // Append the new object
+            let existingData = snapshot.val() || [];
+            
             existingData.push(obj);
-
-            // Save the updated array back to Firebase
+            
             await set(categoryRef, existingData);
-
-            alert(`Item added successfully to ${category}`);
+            
+            Swal.fire({
+                title: "Successfully Posted!",
+                text: `Item added successfully to ${category}.`,
+                icon: "success",
+                confirmButtonText: "OK"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const modalElement = document.getElementsByClassName("postModal")[0];
+                    if (modalElement) {
+                        try {
+                            const bsModal = bootstrap.Modal.getInstance(modalElement);
+                            if (bsModal) {
+                                bsModal.hide();
+                            } else {
+                                modalElement.classList.remove('show');
+                                modalElement.style.display = 'none';
+                                const backdrop = document.querySelector('.modal-backdrop');
+                                if (backdrop) {
+                                    backdrop.parentNode.removeChild(backdrop);
+                                }
+                                document.body.classList.remove('modal-open');
+                            }
+                        } catch (error) {
+                            console.error("Error closing modal:", error);
+                        }
+                    }
+                }
+            });
+            
         } catch (error) {
             console.error("Error adding item:", error);
             alert("Failed to add item.");
@@ -669,14 +333,79 @@ post.addEventListener("click", async (e) => {
     } else {
         alert("Invalid category selected.");
     }
-
-   await fetchData()
+    
+    await fetchData();
 });
+
+async function clearCart() {
+    try {
+        const user = auth.currentUser;
+        if (!user) {
+            alert("Please log in to proceed with order.");
+            return false;
+        }
+
+        const cartRef = ref(database, `users/${user.uid}/cart`);
+        await set(cartRef, null);
+        return true;
+    } catch (error) {
+        console.error("Error clearing cart:", error);
+        alert("Failed to clear cart.");
+        return false;
+    }
+}
+
+function showOrderConfirmation() {
+    Swal.fire({
+        title: "Order Placed!",
+        text: "Your order has been successfully placed.",
+        icon: "success",
+        confirmButtonText: "OK"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const mainBody = document.getElementById('mainbody');
+            mainBody.innerHTML = `
+                <div class='container mt-5 text-center animate__animated animate__fadeIn'>
+                    <div class="card shadow-sm p-5">
+                        <h3>Thank you for your order!</h3>
+                        <p class="mt-3">Your items will be delivered soon.</p>
+                        <button id="continueShopping" class="btn btn-primary mt-4">Continue Shopping</button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById("continueShopping").addEventListener("click", () => {
+                location.href = "main.html";
+            });
+            
+            setFooterPosition();
+        }
+    });
+}
+
+function setFooterPosition() {
+    const footer = document.querySelector('footer');
+    if (footer) {
+        const bodyHeight = document.body.offsetHeight;
+        const windowHeight = window.innerHeight;
+        
+        if (bodyHeight < windowHeight) {
+            footer.style.position = 'fixed';
+            footer.style.bottom = '0';
+            footer.style.width = '100%';
+        } else {
+            footer.style.position = 'relative';
+        }
+    }
+}
+
+window.addEventListener('resize', setFooterPosition);
+window.addEventListener('load', setFooterPosition);
 
 let cart = document.getElementById("cart");
 cart.addEventListener("click", async () => {
-    mainbody.innerHTML = ""; // Clear the mainbody before displaying cart items
-    // footer.innerHTML="";
+    mainbody.innerHTML = "";
+
     async function calculateCartTotal() {
         try {
             const user = auth.currentUser;
@@ -695,7 +424,7 @@ cart.addEventListener("click", async () => {
             return 0;
         }
     }
-    // Fetch and Display Cart Items
+    
     async function fetchCartItems() {
         try {
             const user = auth.currentUser;
@@ -708,7 +437,11 @@ cart.addEventListener("click", async () => {
             const snapshot = await get(cartRef);
 
             if (snapshot.exists()) {
-                return Object.values(snapshot.val());
+                const items = snapshot.val();
+                return Object.entries(items).map(([key, value]) => ({
+                    key,
+                    ...value
+                }));
             } else {
                 console.log("No items in the cart.");
                 return [];
@@ -719,191 +452,47 @@ cart.addEventListener("click", async () => {
         }
     }
 
-    // async function displayCartItems() {
-    //     const cartItems = await fetchCartItems();
-    //     const mainBody = document.getElementById('mainbody');
-
-    //     if (cartItems.length === 0) {
-    //         mainBody.innerHTML = "<p>Your cart is empty.</p>";
-    //         return;
-    //     }
-
-    //     mainBody.innerHTML = ""; // Clear the mainbody before displaying cart items
-
-    //     // Create container for cart items
-    //     const container = document.createElement('div');
-    //     container.className = 'container mt-5 animate__animated animate__fadeIn';
-    //     container.style.paddingTop = '60px';
-
-    //     // Add cart title
-    //     const titleElement = document.createElement('h2');
-    //     titleElement.className = 'text-center mb-4';
-    //     titleElement.textContent = 'Your Cart';
-    //     container.appendChild(titleElement);
-
-    //     // Create row for cart items
-    //     const row = document.createElement('div');
-    //     row.className = 'row g-5';
-
-    //     cartItems.forEach((item, index) => {
-    //         const col = document.createElement('div');
-    //         col.className = 'col-12 col-md-6 col-lg-4';
-
-    //         const cartItem = document.createElement('div');
-    //         cartItem.className = 'card h-100 shadow-sm';
-    //         cartItem.innerHTML = `
-    //             <div class="">
-    //             <p>${item.id}</p>
-    //                 <img src="${item.image}" 
-    //                      class="card-img-top" 
-    //                      alt="${item.title}" 
-    //                      style="height: 450px; object-fit: cover;">
-    //             </div>
-    //             <div class="card-body d-flex flex-column">
-    //                 <h5 class="card-title">${item.title}</h5>
-    //                 <p class="card-text flex-grow-1">${item.description}</p>
-    //                 <p>$${item.price}</p>
-    //                 <div class="d-flex justify-content-between mt-3">
-    //                     <button class="btn btn-success">
-    //                     <i class="fas fa-shopping-bag"></i> Buy Now
-    //                 </button>
-    //                     <button class="btn btn-danger" onclick="removeFromCart('${index}')" id="removeBtn">
-    //                         <i class="fas fa-trash"></i> Remove
-    //                     </button>
-    //                 </div>
-    //             </div>
-    //         `;
-
-    //         // let removeItem=cartItem.querySelector("#removeBtn");
-    //         // removeItem.addEventListener("click",(e)=>{
-    //         //     e.stopImmediatePropagation()
-    //         //   return  removeFromCart(item.id)
-    //         // })
-       
-
-    //         col.appendChild(cartItem);
-    //         row.appendChild(col);
-    //     });
-
-    //     container.appendChild(row);
-    //     mainBody.appendChild(container);
-    // }
-
-
-    // async function displayCartItems() {
-    //     const cartItems = await fetchCartItems();
-    //     const mainBody = document.getElementById('mainbody');
-    
-    //     if (cartItems.length === 0) {
-    //         mainBody.innerHTML = "<p>Your cart is empty.</p>";
-    //         return;
-    //     }
-    
-    //     mainBody.innerHTML = ""; // Clear the mainbody before displaying cart items
-    
-    //     // Create container for cart items
-    //     const container = document.createElement('div');
-    //     container.className = 'container mt-5 animate__animated animate__fadeIn';
-    //     container.style.paddingTop = '60px';
-    
-    //     // Add cart title
-    //     const titleElement = document.createElement('h2');
-    //     titleElement.className = 'text-center mb-4';
-    //     titleElement.textContent = 'Your Cart';
-    //     container.appendChild(titleElement);
-    
-    //     // Create row for cart items
-    //     const row = document.createElement('div');
-    //     row.className = 'row g-5';
-    
-    //     // Calculate total price
-    //     const totalPrice = cartItems.reduce((total, item) => total + Number(item.price), 0);
-    
-    //     // Add total price display at the top
-    //     const totalDisplay = document.createElement('div');
-    //     totalDisplay.className = 'alert alert-primary text-center mb-4';
-    //     totalDisplay.innerHTML = `
-    //         <h4 class="mb-0">Total: $${totalPrice.toFixed(2)}</h4>
-    //     `;
-    //     container.appendChild(totalDisplay);
-    
-    //     cartItems.forEach((item, index) => {
-    //         const col = document.createElement('div');
-    //         col.className = 'col-12 col-md-6 col-lg-4';
-    
-    //         const cartItem = document.createElement('div');
-    //         cartItem.className = 'card h-100 shadow-sm';
-    //         cartItem.innerHTML = `
-    //             <div class="">
-    //                 <img src="${item.image}" 
-    //                      class="card-img-top" 
-    //                      alt="${item.title}" 
-    //                      style="height: 450px; object-fit: cover;">
-    //             </div>
-    //             <div class="card-body d-flex flex-column">
-    //                 <h5 class="card-title">${item.title}</h5>
-    //                 <p class="card-text flex-grow-1">${item.description}</p>
-    //                 <p class="text-primary fw-bold">$${Number(item.price).toFixed(2)}</p>
-    //                 <div class="d-flex justify-content-between mt-3">
-    //                     <button class="btn btn-success">
-    //                         <i class="fas fa-shopping-bag"></i> Buy Now
-    //                     </button>
-    //                     <button class="btn btn-danger" onclick="removeFromCart('${index}')" id="removeBtn">
-    //                         <i class="fas fa-trash"></i> Remove
-    //                     </button>
-    //                 </div>
-    //             </div>
-    //         `;
-    
-    //         col.appendChild(cartItem);
-    //         row.appendChild(col);
-    //     });
-    
-    //     container.appendChild(row);
-    //     mainBody.appendChild(container);
-    // }
-
-
-
     async function displayCartItems() {
         const cartItems = await fetchCartItems();
         const mainBody = document.getElementById('mainbody');
-        console.log(cartItems)
+        
         if (cartItems.length === 0) {
-            mainBody.innerHTML = "<p class='text-center mt-5'>Your cart is empty.</p>";
+            mainBody.innerHTML = `
+                <div class='container mt-5 text-center'>
+                    <h3>Your cart is empty</h3>
+                    <button id="startShopping" class="btn btn-primary mt-4">Start Shopping</button>
+                </div>`;
+                
+            document.getElementById("startShopping").addEventListener("click", () => {
+                location.href = "main.html";
+            });
+            
+            setFooterPosition();
             return;
         }
     
-        mainBody.innerHTML = ""; // Clear the mainbody
+        mainBody.innerHTML = "";
     
-        // Create container for cart items
         const container = document.createElement('div');
         container.className = 'container mt-5 animate__animated animate__fadeIn';
         container.style.paddingTop = '60px';
     
-        // Add cart title
         const titleElement = document.createElement('h2');
         titleElement.className = 'text-center mb-4';
         titleElement.textContent = 'Your Cart';
         container.appendChild(titleElement);
     
-        // Create row for cart items
         const row = document.createElement('div');
         row.className = 'row g-5';
-    
-        // Store the keys along with items for proper removal
-        const itemsWithKeys = Object.entries(cartItems).map(([key, value]) => ({
-            key,
-            ...value
-        }));
         
-        cartItems.forEach((item,index) => {
-            console.log(item)
+        cartItems.forEach((item) => {
             const col = document.createElement('div');
             col.className = 'col-12 col-md-6 col-lg-4';
     
             let cartItem = document.createElement('div');
             cartItem.className = 'card h-100 shadow-sm';
+            const quantity = item.quantity || 1;
+            const basePrice = Number(item.price) / quantity; // Calculate base price per unit
             cartItem.innerHTML = `
                 <div class="">
                     <img src="${item.image}" 
@@ -913,13 +502,18 @@ cart.addEventListener("click", async () => {
                 </div>
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">${item.title}</h5>
-                    <p class="card-text flex-grow-1">${item.description}</p>
-                    <p class="text-primary fw-bold">$${Number(item.price).toFixed(2)}</p>
+                    <p class="card-text flex-grow-1">${item.description || ""}</p>
+                    <p class="text-primary fw-bold">Price: ${Number(item.price).toFixed(2)}</p>
+                    <div class="d-flex align-items-center mb-3">
+                        <button class="btn btn-outline-secondary btn-sm decrement-btn" data-key="${item.key}">-</button>
+                        <span class="mx-2">Quantity: ${quantity}</span>
+                        <button class="btn btn-outline-secondary btn-sm increment-btn" data-key="${item.key}">+</button>
+                    </div>
                     <div class="d-flex justify-content-between mt-3">
                         <button class="btn btn-success" id="buynow">
                             <i class="fas fa-shopping-bag"></i> Buy Now
                         </button>
-                        <button class="btn btn-danger remove-item" id="remove" data-key="${item.key}" data-price="${item.price}">
+                        <button class="btn btn-danger remove-item" data-key="${item.key}">
                             <i class="fas fa-trash"></i> Remove
                         </button>
                     </div>
@@ -928,75 +522,99 @@ cart.addEventListener("click", async () => {
     
             col.appendChild(cartItem);
             row.appendChild(col);
+            
             cartItem.querySelector("#buynow").addEventListener("click", () => {
                 const proceedToOrder = new bootstrap.Modal(document.getElementById("addressModal"));
                 proceedToOrder.show();
-                
             });
-            const user = auth.currentUser;
-            const cartRef = ref(database, `users/${user.uid}/cart`);
-            cartItem.querySelector("#remove").addEventListener("click",()=>{
-               let cartpro = cartItems.slice(0, index).concat(cartItems.slice(index + 1));
-                console.log(cartpro);
-                set(cartRef, cartpro)
-            })
-        
+            
+            cartItem.querySelector(".remove-item").addEventListener("click", async () => {
+                const key = cartItem.querySelector(".remove-item").getAttribute("data-key");
+                await removeFromCart(key);
+            });
+
+            cartItem.querySelector(".increment-btn").addEventListener("click", async () => {
+                const key = cartItem.querySelector(".increment-btn").getAttribute("data-key");
+                await updateCartQuantity(key, quantity + 1, basePrice);
+            });
+
+            cartItem.querySelector(".decrement-btn").addEventListener("click", async () => {
+                const key = cartItem.querySelector(".decrement-btn").getAttribute("data-key");
+                if (quantity > 1) {
+                    await updateCartQuantity(key, quantity - 1, basePrice);
+                } else {
+                    await removeFromCart(key);
+                }
+            });
         });
     
         container.appendChild(row);
 
-        // Calculate total price
-        const totalPrice = itemsWithKeys.reduce((total, item) => total + Number(item.price), 0);
+        const totalPrice = cartItems.reduce((total, item) => total + Number(item.price), 0);
 
-// Create total price section at bottom
-const totalSection = document.createElement('div');
-totalSection.className = 'container mt-4 mb-5';
-totalSection.innerHTML = `
-   <div class="card shadow w-25"> 
-    <div class="card-body p-2"> 
-        <div class="row align-items-center">
-            <div class="col">
-                <h6 class="mb-0">Cart Total</h6> 
-            </div>
-            <div class="col text-end">
-                <h5 class="mb-0" id="cartTotal">$${totalPrice.toFixed(2)}</h5>
+        const totalSection = document.createElement('div');
+        totalSection.className = 'container mt-4 mb-5';
+        totalSection.innerHTML = `
+           <div class="card shadow w-25" id="carttotal"> 
+            <div class="card-body p-2"> 
+                <div class="row align-items-center" class="col-12 col-md-6 col-lg-4">
+                    <div class="col">
+                        <h6 class="mb-0" style="font-size:0.9rem">Cart Total</h6> 
+                    </div>
+                    <div class="col text-end">
+                        <h5 class="mb-0" id="cartTotal" style="font-size:0.9rem">${totalPrice.toFixed(2)}</h5>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" id="proceedBtn" style="font-size: 0.7rem;">
+                            Proceed To Order
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row mt-2">
-            <div class="col">
-                <button class="btn btn-primary btn-sm " style="width:50%" id="proceedBtn"> <!-- Made button smaller -->
-                    Proceed To Order
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-`;
+        `;
 
-// Add event listener after the element is created
-totalSection.querySelector("#proceedBtn").addEventListener("click", () => {
-    const proceedToOrder = new bootstrap.Modal(document.getElementById("addressModal"));
-    proceedToOrder.show();
-});
-
-mainBody.appendChild(container);
-mainBody.appendChild(totalSection);
-    
-        // Add event listeners for remove buttons
-        document.querySelectorAll('.remove-item').forEach(button => {
-            button.addEventListener('click', async function() {
-                const itemKey = this.getAttribute('data-key');
-                const itemPrice = Number(this.getAttribute('data-price'));
-                await removeFromCart(itemKey, itemPrice);
-            });
+        totalSection.querySelector("#proceedBtn").addEventListener("click", () => {
+            const proceedToOrder = new bootstrap.Modal(document.getElementById("addressModal"));
+            proceedToOrder.show();
         });
+
+        mainBody.appendChild(container);
+        mainBody.appendChild(totalSection);
+        
+        setFooterPosition();
     }
 
-
+    async function updateCartQuantity(key, newQuantity, basePrice) {
+        try {
+            const user = auth.currentUser;
+            if (!user) {
+                alert("Please log in to update cart.");
+                return;
+            }
     
-
+            await update(ref(database, `users/${user.uid}/cart/${key}`), {
+                quantity: newQuantity,
+                price: basePrice * newQuantity
+            });
     
-    // Function to remove from cart (Fixes the Firebase issue)
+            Swal.fire({
+                title: "Quantity Updated!",
+                text: "Your cart has been updated.",
+                icon: "success",
+                confirmButtonText: "OK",
+                allowOutsideClick: false
+            });
+    
+            displayCartItems();
+        } catch (error) {
+            console.error("Error updating quantity:", error);
+            alert("Failed to update cart quantity.");
+        }
+    }
+
     async function removeFromCart(itemKey) {
         try {
             const user = auth.currentUser;
@@ -1016,7 +634,6 @@ mainBody.appendChild(totalSection);
                 allowOutsideClick: false
             });
     
-            // Refresh cart display
             displayCartItems();
         } catch (error) {
             console.error("Error removing item:", error);
@@ -1024,109 +641,17 @@ mainBody.appendChild(totalSection);
         }
     }
     
-    
-    // async function removeFromCart(itemKey, itemPrice) {
-    //     try {
-    //         const user = auth.currentUser;
-    //         if (!user) {
-    //             alert("Please log in to manage your cart.");
-    //             return;
-    //         }
-    
-    //         const itemRef = ref(database, `users/${user.uid}/cart/${itemKey}`);
-    //         await remove(itemRef);
-    //         console.log("Removing item from path:", `users/${user.uid}/cart/${itemKey}`);
-
-    
-    //         // Update the total immediately
-    //         const currentTotal = document.getElementById('cartTotal');
-    //         if (currentTotal) {
-    //             const totalPrice = Number(currentTotal.textContent.replace('$', ''));
-    //             const newTotal = totalPrice - itemPrice;
-    //             currentTotal.textContent = `$${newTotal.toFixed(2)}`;
-    //         }
-    
-    //         // Refresh the entire cart display if the total is 0
-    //         if (currentTotal && currentTotal.textContent === '$0.00') {
-    //             await displayCartItems();
-    //         } else {
-    //             // Remove just the card element
-    //             // console.log("Removing item with key:", itemKey);
-    //             // console.log("Item element in DOM:", document.querySelector(`[data-key="${itemKey}"]`));
-    //             // const cardElement = document.querySelector(`[data-key=${itemKey}]`).closest('.col');
-    //             // cardElement.remove();
-
-    //             // new code
-    //             // const cardElement = document.querySelector(`[data-key="${itemKey}"]`).closest('.card')
-    //             // cardElement.remove();
-    //         }
-    
-    //         alert("Item removed from cart.");
-    //     } catch (error) {
-    //         console.log(error)
-    //         console.error("Error removing item from cart:", error);
-    //         alert("Failed to remove item from cart.");
-    //     }
-    // }
-
-    // async function removeFromCart(itemKey) {
-    //     try {
-    //         const user = auth.currentUser;
-    //         if (!user) {
-    //             alert("Please log in to manage your cart.");
-    //             return;
-    //         }
-    
-    //         console.log("Removing item with key:", itemKey);
-    
-    //         const itemRef = ref(database, `users/${user.uid}/cart/${itemKey}`);
-    //         await remove(itemRef);
-    
-    //         alert("Item removed from cart.");
-    //         await displayCartItems();
-    //     } catch (error) {
-    //         console.error("Error removing item from cart:", error);
-    //         alert("Failed to remove item from cart.");
-    //     }
-    // }
-    
     window.removeFromCart = removeFromCart;
     window.displayCartItems = displayCartItems;
-    await displayCartItems(); // Call the function to display cart items
+    
+    await displayCartItems();
 });
-
-// Function to remove an item from the cart
-// Function to remove an item from the cart
-// async function removeFromCart(itemKey) {
-//     try {
-//         const user = auth.currentUser;
-//         if (!user) {
-//             alert("Please log in to manage your cart.");
-//             return;
-//         }
-
-//         console.log("Removing item with key:", itemKey); // Debugging log
-
-//         const itemRef = ref(database, `users/${user.uid}/cart/${itemKey}`);
-//         await remove(itemRef); // Remove item from Firebase
-
-//         alert("Item removed from cart.");
-//         await displayCartItems(); // Refresh cart display
-//     } catch (error) {
-//         console.error("Error removing item from cart:", error);
-//         alert("Failed to remove item from cart.");
-//     }
-// }
-
-
-// Expose function to the global scope
-
 
 const logout = document.getElementById("logout");
 
 if (logout) {
   logout.addEventListener("click", async (e) => {
-    e.preventDefault(); // Prevents default action
+    e.preventDefault();
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -1153,7 +678,6 @@ if (logout) {
         icon: "success"
       });
 
-      // Redirect after logout confirmation
       location.href = "index.html";
     } else if (result.dismiss === Swal.DismissReason.cancel) {
       swalWithBootstrapButtons.fire({
@@ -1167,21 +691,175 @@ if (logout) {
   console.error("Logout button not found!");
 }
 
-
-document.querySelector("#addressModal .btn-primary").addEventListener("click",  (e) => {
-    e.preventDefault(); // Prevent default form submission
+document.querySelector("#addressModal .btn-primary").addEventListener("click", async (e) => {
+    e.preventDefault();
     
-    Swal.fire({
-        title: "Order Placed!",
-    text: "Your order has been successfully placed.",
-    icon: "success",
-    confirmButtonText: "OK"
-      })
-
+    const success = await clearCart();
+    
+    if (success) {
+        const modal = bootstrap.Modal.getInstance(document.getElementById("addressModal"));
+        modal.hide();
+        
+        showOrderConfirmation();
+    }
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    const uploadModalElement = document.getElementById("exampleModal");
+    const uploadModal = uploadModalElement ? new bootstrap.Modal(uploadModalElement) : null;
 
-let ArtistryHub=document.getElementById("ArtistryHub")
-ArtistryHub.addEventListener("click",()=>{
-    location.href="main.html"
-})
+    const uploadButton = document.getElementById("uploadButton");
+    if (uploadButton && uploadModal) {
+        uploadButton.addEventListener("click", () => {
+            uploadModal.show();
+        });
+    }
+
+    const postButton = document.getElementById("post");
+    if (postButton) {
+        postButton.addEventListener("click", async (e) => {
+            e.preventDefault();
+
+            const title = document.getElementById("title1")?.value.trim();
+            const url = document.getElementById("imageSrc1")?.value.trim();
+            const description = document.getElementById("description1")?.value.trim();
+            const price = document.getElementById("price1")?.value.trim();
+            const category = document.getElementById("category")?.value;
+
+            if (!title || !url || !price || !category) {
+                await Swal.fire({
+                    title: "Missing Information",
+                    text: "Please fill in all required fields",
+                    icon: "warning",
+                    confirmButtonText: "OK"
+                });
+                return;
+            }
+
+            if (!["art", "gifts", "dresses"].includes(category)) {
+                await Swal.fire({
+                    title: "Invalid Category",
+                    text: "Please select a valid category",
+                    icon: "error",
+                    confirmButtonText: "OK"
+                });
+                return;
+            }
+
+            const product = {
+                title: title,
+                category: category,
+                price: price,
+                image: url,
+                description: description || ""
+            };
+
+            try {
+                Swal.fire({
+                    title: "Uploading...",
+                    html: "Please wait while we process your product",
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                const db = getDatabase();
+                const categoryRef = ref(db, `artyhub/${category}`);
+                
+                const snapshot = await get(categoryRef);
+                const existingData = snapshot.exists() ? snapshot.val() : [];
+                
+                existingData.push(product);
+                
+                await set(categoryRef, existingData);
+
+                Swal.fire({
+                    title: "Success!",
+                    text: "Your product has been uploaded successfully",
+                    icon: "success",
+                    confirmButtonText: "OK"
+                }).then((res) => {
+                    if (res.isConfirmed) {
+                        uploadModal.hide();
+                    }
+                });
+
+                const uploadForm = document.getElementById("uploadForm");
+                if (uploadForm) {
+                    uploadForm.reset();
+                }
+                
+                const previewContainer = document.getElementById("imagePreview");
+                if (previewContainer) {
+                    previewContainer.innerHTML = '';
+                }
+
+                if (typeof fetchData === 'function') {
+                    await fetchData();
+                }
+
+            } catch (error) {
+                console.error("Upload error:", error);
+                await Swal.fire({
+                    title: "Error",
+                    text: "Failed to upload product. Please try again.",
+                    icon: "error",
+                    confirmButtonText: "OK"
+                });
+            }
+        });
+    }
+
+    const imageUrlInput = document.getElementById("imageSrc1");
+    if (imageUrlInput) {
+        imageUrlInput.addEventListener("blur", function() {
+            const url = this.value.trim();
+            const previewContainer = document.getElementById("imagePreview");
+            
+            if (previewContainer) {
+                if (url) {
+                    previewContainer.innerHTML = `
+                        <div class="mt-2 mb-3">
+                            <label class="form-label">Image Preview</label>
+                            <img src="${url}" class="img-thumbnail" style="max-height: 150px;" alt="Preview">
+                        </div>
+                    `;
+                } else {
+                    previewContainer.innerHTML = '';
+                }
+            }
+        });
+    }
+
+    if (uploadModalElement) {
+        uploadModalElement.addEventListener('hidden.bs.modal', function() {
+            const uploadForm = document.getElementById("uploadForm");
+            if (uploadForm) {
+                uploadForm.reset();
+            }
+            const previewContainer = document.getElementById("imagePreview");
+            if (previewContainer) {
+                previewContainer.innerHTML = '';
+            }
+        });
+    }
+});
+
+function addImagePreviewArea() {
+    const imageInput = document.getElementById("imageSrc1");
+    if (imageInput) {
+      const previewDiv = document.createElement("div");
+      previewDiv.id = "imagePreview";
+      imageInput.parentNode.insertAdjacentElement('afterend', previewDiv);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', addImagePreviewArea);
+
+document.addEventListener('click', function(e) {
+    if (e.target.closest('#ArtistryHub')) {
+        e.preventDefault();
+        window.location.href = "main.html";
+    }
+});

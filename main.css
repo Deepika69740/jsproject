@@ -82,8 +82,15 @@ footer{
     }
     .carousel-item > img {
         padding-top: 60px;
-        height: 35vh;
+        height: 40vh;
+
     }
+    #dress>img,#gift1>img,#gift2>img,#art>img{
+        height: 270px;
+ };
+ #carttotal{
+    width: 20px;
+ }
     .image-container{
         flex-wrap:wrap ;
         gap: 20px;
@@ -102,7 +109,10 @@ footer{
      }
      .carousel-item > img {
          padding-top: 60px;
-         height: 35vh;
+         height: 30vh;
+     }
+     #dress>img,#gift1>img,#gift2>img,#art>img{
+            height: 360px;
      }
      .image-container{
          flex-wrap:wrap ;
@@ -113,6 +123,6 @@ footer{
          width: 45%;
      }
      .image-container .image-item button{
-         bottom: 50px;
+         margin-top: 0px!important;
      }
 }
